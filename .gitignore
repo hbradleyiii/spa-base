@@ -1,0 +1,8 @@
+.env
+*$py.class
+*.py[cod]
+/htdocs/css/
+/htdocs/js/
+/log/
+/venv/
+__pycache__/
