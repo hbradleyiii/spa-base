@@ -4,5 +4,6 @@
 /htdocs/css/
 /htdocs/js/
 /log/
+/node_modules/
 /venv/
 __pycache__/
