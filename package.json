@@ -12,11 +12,27 @@
   },
   "scripts": {},
   "dependencies": {
+    "@babel/core": "^7.1.2",
+    "@babel/preset-env": "^7.1.0",
     "axios": "^0.18.0",
     "axios-method-override": "^1.1.2",
+    "babelify": "^10.0.0",
     "browserify": "^16.2.2",
     "vue": "^2.5.17",
-    "vue-router": "^3.0.1"
+    "vue-router": "^3.0.1",
+    "vueify": "^9.4.1"
   },
-  "devDependencies": {}
+  "devDependencies": {},
+  "babel": {
+    "presets": [
+      "@babel/preset-env"
+    ],
+    "plugins": []
+  },
+  "browserify": {
+    "transform": [
+      "babelify",
+      "vueify"
+    ]
+  }
 }
