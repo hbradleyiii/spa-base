@@ -13,6 +13,7 @@
   "scripts": {},
   "dependencies": {
     "axios": "^0.18.0",
+    "axios-method-override": "^1.1.2",
     "browserify": "^16.2.2",
     "vue": "^2.5.17",
     "vue-router": "^3.0.1"
