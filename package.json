@@ -1,0 +1,21 @@
+{
+  "name": "spa-base",
+  "version": "0.0.1",
+  "description": "A Flask-Vue SPA project base.",
+  "author": "Harold Bradley III",
+  "author_url": "https://www.haroldbradleyiii.com/",
+  "license": "MIT",
+  "main": "",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/hbradleyiii/spa-base.git"
+  },
+  "scripts": {},
+  "dependencies": {
+    "axios": "^0.18.0",
+    "browserify": "^16.2.2",
+    "vue": "^2.5.17",
+    "vue-router": "^3.0.1"
+  },
+  "devDependencies": {}
+}
