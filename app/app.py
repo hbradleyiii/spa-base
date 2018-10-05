@@ -45,12 +45,13 @@ def create_app(Config = None):
 
 
 def register_blueprints(app):
-    """Automatically registers all blueprints that are in the app.modules
+    """Automatically registers all blueprints that are in the app.blueprints
     package.
 
     @see https://speakerdeck.com/player/94a53afb6a524ad88f301f62166a27e4
     """
-    for name in find_modules('app.modules', include_packages=True, recursive=True):
-        mod = import_string(name)
-        if hasattr(mod, 'blueprint'):
-            app.register_blueprint(mod.blueprint)
+    for name in find_modules('app.blueprints', include_packages=True,
+                             recursive=True):
+        bp = import_string(name)
+        if hasattr(bp, 'blueprint'):
+            app.register_blueprint(bp.blueprint)
