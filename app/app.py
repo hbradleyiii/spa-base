@@ -13,11 +13,14 @@ from dotenv import load_dotenv
 from flask import Flask, redirect, request, render_template
 from werkzeug.utils import find_modules, import_string
 
+from .middleware import HTTPMethodOverrideMiddleware
+
 
 def create_app(Config = None):
     """Flask app factory function."""
     load_dotenv()
     app = Flask(__name__)
+    app.wsgi_app = HTTPMethodOverrideMiddleware(app.wsgi_app)
     register_blueprints(app)
 
     if app.config['FLASK_ENV'] == 'development':
