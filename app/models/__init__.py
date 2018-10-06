@@ -9,6 +9,7 @@ The models module for spa-base.
 
 
 from .base import BaseModel, db, migrate
+from .user import User
 
 
 def init_app(app):
