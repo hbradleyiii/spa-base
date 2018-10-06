@@ -11,15 +11,12 @@ from os import path
 
 from dotenv import load_dotenv
 from flask import Flask, redirect, request, render_template
-from flask_migrate import Migrate
-from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import find_modules, import_string
 
-from .middleware import HTTPMethodOverrideMiddleware
+from app import models
 from .config import Config as DefaultConfig
+from .middleware import HTTPMethodOverrideMiddleware
 
-db = SQLAlchemy()
-migrate = Migrate()
 
 def create_app(Config = None):
     """Flask app factory function."""
@@ -28,8 +25,7 @@ def create_app(Config = None):
     app.wsgi_app = HTTPMethodOverrideMiddleware(app.wsgi_app)
     app.config.from_object(Config or DefaultConfig)
     register_blueprints(app)
-    db.init_app(app)
-    migrate.init_app(app, db)
+    models.init_app(app)
 
     if app.config['FLASK_ENV'] == 'development':
         @app.before_request
