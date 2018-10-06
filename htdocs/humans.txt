@@ -1,0 +1,10 @@
+/* TEAM */
+    Lead Developer: Harold Bradley III
+    Contact: harold [at] bradleystudio.net
+    From: Jeffersonville, IN, US
+
+/* SITE */
+    Last update: 10/05/2018
+    Language: English
+    Doctype: HTML5
+    IDE: Vim, urxvt, tmux, Gimp
