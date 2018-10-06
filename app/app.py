@@ -66,3 +66,5 @@ def register_blueprints(app):
         bp = import_string(name)
         if hasattr(bp, 'blueprint'):
             app.register_blueprint(bp.blueprint)
+        if hasattr(bp, 'init_app'):
+            bp.init_app(app)
