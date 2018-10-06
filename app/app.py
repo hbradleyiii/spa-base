@@ -4,7 +4,7 @@
 app.app
 ~~~~~~~
 
-The app factory for spa-base
+The app factory for spa-base.
 """
 
 from os import path
@@ -16,6 +16,7 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import find_modules, import_string
 
 from .middleware import HTTPMethodOverrideMiddleware
+from .config import Config as DefaultConfig
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -25,6 +26,7 @@ def create_app(Config = None):
     load_dotenv()
     app = Flask(__name__)
     app.wsgi_app = HTTPMethodOverrideMiddleware(app.wsgi_app)
+    app.config.from_object(Config or DefaultConfig)
     register_blueprints(app)
     db.init_app(app)
     migrate.init_app(app, db)
