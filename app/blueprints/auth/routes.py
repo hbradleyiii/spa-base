@@ -19,8 +19,8 @@ from flask import (
 from flask_login import current_user, login_user, logout_user
 from werkzeug.urls import url_parse
 
-from app.models import User
-from .forms import LoginForm
+from app.models import db, User
+from .forms import LoginForm, RegistrationForm
 
 
 blueprint = Blueprint('auth', __name__, template_folder='templates')
@@ -50,3 +50,20 @@ def logout():
         abort(405)
     logout_user()
     return redirect(url_for('auth.login'))
+
+
+@blueprint.route('/register/', methods=['GET', 'POST'])
+def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        user = User(email=form.email.data, password=form.password.data,
+                    first_name=form.first_name.data,
+                    last_name=form.last_name.data)
+        db.session.add(user)
+        db.session.commit()
+        flash('Congratulations, you are now a registered user!')
+        return redirect(url_for('auth.login'))
+    return render_template('auth/registration_form.html', title='Register',
+                           form=form)
