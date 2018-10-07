@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+
+    {% if title %}
+    <title>{{ title }} - SPA-Base</title>
+    {% else %}
+    <title>Welcome to SPA-Base</title>
+    {% endif %}
+</head>
+<body>
+    <div>
+        SPA-Base:
+        <a href="{{ url_for('index') }}">Home</a>
+        {% if current_user.is_anonymous %}
+            <form action="{{ url_for('auth.login') }}" method="GET">
+                <input type="submit" value="Login">
+            </form>
+        {% else %}
+            <form action="{{ url_for('auth.logout') }}" method="POST">
+                <input type="submit" value="Logout">
+            </form>
+        {% endif %}
+    </div>
+    <hr>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    {% endwith %}
+
+    {% block content %}
+    {% endblock %}
+</body>
+</html>
