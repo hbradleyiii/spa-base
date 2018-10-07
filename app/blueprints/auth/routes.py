@@ -17,6 +17,7 @@ from flask import (
     url_for,
 )
 from flask_login import current_user, login_user, logout_user
+from werkzeug.urls import url_parse
 
 from app.models import User
 from .forms import LoginForm
