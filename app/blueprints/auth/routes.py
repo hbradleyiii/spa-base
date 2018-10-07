@@ -37,7 +37,7 @@ def login():
             return redirect(url_for('auth.login'))
         login_user(user, remember=form.remember_me.data)
         return redirect(url_for('index'))
-    return render_template('auth/login_form.html', title='Sign in', form=form)
+    return render_template('auth/login_form.html', title='Login', form=form)
 
 
 @blueprint.route('/logout/', methods=['GET', 'POST'])
