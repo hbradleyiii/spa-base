@@ -4,7 +4,7 @@
 app.blueprints.pages.routes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The pages routes for spa-base
+The pages routes for spa-base.
 """
 
 from flask import Blueprint, render_template
