@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
 """
-app.models
-~~~~~~~~~~
+app.models.user
+~~~~~~~~~~~~~~~
 
-The models module for spa-base.
+The User model for spa-base.
 """
 
 from datetime import datetime
