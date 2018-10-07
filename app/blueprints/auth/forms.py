@@ -13,13 +13,18 @@ from wtforms.fields import (
     SubmitField,
 )
 from wtforms.fields.html5 import EmailField
-from wtforms.validators import DataRequired
+from wtforms.validators import (
+    DataRequired,
+    Email,
+    EqualTo,
+    ValidationError,
+)
 
 from app.forms import BaseForm
 
 
 class LoginForm(BaseForm):
-    username = EmailField('Username', validators=[DataRequired()])
+    email = EmailField('Email Address', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
     remember_me = BooleanField('Remember Me')
     submit = SubmitField('Login')
