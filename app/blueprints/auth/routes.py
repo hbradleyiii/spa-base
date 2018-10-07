@@ -25,7 +25,7 @@ from .forms import LoginForm
 blueprint = Blueprint('auth', __name__, template_folder='templates')
 
 
-@blueprint.route('/login', methods=['GET', 'POST'])
+@blueprint.route('/login/', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
         return redirect(url_for('index'))
@@ -40,7 +40,7 @@ def login():
     return render_template('auth/login_form.html', title='Sign in', form=form)
 
 
-@blueprint.route('/logout', methods=['GET', 'POST'])
+@blueprint.route('/logout/', methods=['GET', 'POST'])
 def logout():
     if request.method == 'GET':
         abort(405)
