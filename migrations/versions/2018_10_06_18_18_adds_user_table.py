@@ -1,9 +1,12 @@
-"""adds user table
+# -*- coding: utf-8 -*-
+
+"""
+adds user table
+~~~~~~~~~~~~~~~~~~~~~~
 
 Revision ID: 197c3ef71f00
 Revises:
 Create Date: 2018-10-06 18:18:32.510349
-
 """
 from alembic import op
 import sqlalchemy as sa
