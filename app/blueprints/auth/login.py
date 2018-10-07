@@ -13,6 +13,7 @@ from app.models import User
 
 
 login = LoginManager()
+login.login_view = 'auth.login'
 
 @login.user_loader
 def load_user(id):
