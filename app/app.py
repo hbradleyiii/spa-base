@@ -13,7 +13,7 @@ from dotenv import load_dotenv
 from flask import Flask, redirect, request
 from werkzeug.utils import find_modules, import_string
 
-from app import models, logger, routes
+from app import logger, mail, models, routes
 from .config import Config as DefaultConfig
 from .middleware import HTTPMethodOverrideMiddleware
 
@@ -27,6 +27,7 @@ def create_app(Config = None):
     register_blueprints(app)
     models.init_app(app)
     routes.init_app(app)
+    mail.init_app(app)
     logger.init_app(app)
 
     if app.config['FLASK_ENV'] == 'development':
