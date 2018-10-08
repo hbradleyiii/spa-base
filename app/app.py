@@ -10,11 +10,10 @@ The app factory for spa-base.
 from os import path
 
 from dotenv import load_dotenv
-from flask import Flask, redirect, request, render_template
-from flask_login import login_required
+from flask import Flask, redirect, request
 from werkzeug.utils import find_modules, import_string
 
-from app import models
+from app import routes, models
 from .config import Config as DefaultConfig
 from .middleware import HTTPMethodOverrideMiddleware
 
@@ -27,12 +26,7 @@ def create_app(Config = None):
     app.config.from_object(Config or DefaultConfig)
     register_blueprints(app)
     models.init_app(app)
-
-    @app.route('/')
-    @app.route('/<path:path>')
-    @login_required
-    def index(path=None):
-        return render_template('index.html', path=path)
+    routes.init_app(app)
 
     if app.config['FLASK_ENV'] == 'development':
         # Support static files in development mode
