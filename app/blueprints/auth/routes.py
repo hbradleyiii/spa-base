@@ -4,7 +4,7 @@
 app.blueprints.auth.routes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The auth routes for spa-base
+The auth routes for spa-base.
 """
 
 from flask import (
