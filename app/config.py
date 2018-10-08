@@ -16,7 +16,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 class Config(object):
     """The default config object."""
     FLASK_ENV                = os.environ.get('FLASK_ENV') or 'production'
-    DEBUG                    = os.environ.get('DEBUG') or False
+    DEBUG                    = os.environ.get('DEBUG', 'false').lower() in [1, 'true', 'yes']
     TESTING                  = os.environ.get('TESTING') or False
     SECRET_KEY               = os.environ.get('SECRET_KEY') or \
                                '___change_me_please___'
