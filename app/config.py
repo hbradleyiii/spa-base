@@ -38,6 +38,7 @@ class Config(object):
     MAIL_PORT                = int(os.environ.get('MAIL_PORT')) or 443
     MAIL_USE_TLS             = os.environ.get('MAIL_USE_TLS') is not None or True
     ADMIN_EMAILS             = os.environ.get('ADMIN_EMAILS').split(',') or []
+    SERVER_EMAIL             = os.environ.get('SERVER_EMAIL') or None
 
 
 class TestingConfig(Config):
