@@ -1,9 +1,10 @@
 .env
 *$py.class
 *.py[cod]
+*.db
 /htdocs/css/
 /htdocs/js/
-/log/
+/logs/
 /node_modules/
 /venv/
 __pycache__/
