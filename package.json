@@ -13,7 +13,9 @@
   "scripts": {},
   "dependencies": {
     "@babel/core": "^7.1.2",
+    "@babel/plugin-transform-runtime": "^7.1.0",
     "@babel/preset-env": "^7.1.0",
+    "@babel/runtime": "^7.1.2",
     "axios": "^0.18.0",
     "axios-method-override": "^1.1.2",
     "babelify": "^10.0.0",
@@ -28,6 +30,9 @@
       "@babel/preset-env"
     ],
     "plugins": []
+  },
+  "browser": {
+    "vue": "vue/dist/vue.common.js"
   },
   "browserify": {
     "transform": [
