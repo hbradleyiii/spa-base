@@ -29,35 +29,9 @@ def create_app(Config = None):
     routes.init_app(app)
     mail.init_app(app)
     logger.init_app(app)
-    debug.init_app(app)
 
     if app.config['FLASK_ENV'] == 'development':
-        # Support static files in development mode
-        @app.before_request
-        def route_static_files():
-            """This function routes static files appropriately when in development
-            mode (flask run).
-
-            Rather than forcing all static files to be in the 'static' directory,
-            this allows the possiblity of serving files from the root. This is
-            quite easy with Apache or Nginx, but when running via `flask run`
-            (assuming FLASK_ENV is set to 'development'), this function is
-            necessary. It first checks to see if a path is a real file, then it
-            redirects to the static soft link which Flask can handle
-            appropriately.
-            """
-            basedir = path.abspath(path.dirname(__file__))
-            request_path = request.path
-            if request_path[0] == '/':
-                request_path = request_path[1:]
-            if path.isfile(basedir + '/static/' + request_path):
-                return redirect('/static/' + request_path, 307)
-
-        # Shell context for the debug environment
-        @app.shell_context_processor
-        def make_shell_context():
-            from app.models import db, User
-            return {'db': db, 'User': User}
+        debug.init_app(app)
 
     return app
 
