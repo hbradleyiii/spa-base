@@ -23,4 +23,8 @@
         <p>{{ form.submit() }}</p>
     </form>
     <p>New User? <a href="{{ url_for('auth.register') }}">Click to Register!</a></p>
+	<p>
+		Forgot Your Password?
+		<a href="{{ url_for('auth.request_password_reset') }}">Click to Reset It</a>
+	</p>
 {% endblock %}
