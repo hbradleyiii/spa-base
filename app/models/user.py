@@ -7,9 +7,11 @@ app.models.user
 The User model for spa-base.
 """
 
-from datetime import datetime
+from flask import current_app
 from flask_login import UserMixin
 from hashlib import md5
+from jwt import encode as jwt_encode, decode as jwt_decode
+from time import time
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from .base import BaseModel, db
@@ -50,3 +52,19 @@ class User(UserMixin, BaseModel):
         digest = md5(self.email.lower().encode('utf-8')).hexdigest()
         return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(
             digest, size)
+
+    @property
+    def password_reset_token(self, expires_in=600):
+        return jwt_encode({'password_reset': self.email,
+                           'exp': time() + expires_in},
+                          current_app.config['SECRET_KEY'],
+                          algorithm='HS256').decode('utf-8')
+
+    @staticmethod
+    def verify_password_reset_token(token):
+        try:
+            email = jwt_decode(token, current_app.config['SECRET_KEY'],
+                            algorithms=['HS256'])['password_reset']
+        except:
+            return
+        return User.query.filter_by(email=email).first()
