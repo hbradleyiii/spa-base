@@ -32,6 +32,19 @@ class LoginForm(BaseForm):
     submit = SubmitField('Login')
 
 
+class RequestPasswordResetForm(BaseForm):
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    submit = SubmitField('Request Password Reset')
+
+
+class PasswordResetForm(BaseForm):
+    password = PasswordField('Password', validators=[DataRequired()])
+    confirm_password = PasswordField('Confirm Password',
+                                     validators=[DataRequired(),
+                                     EqualTo('password')])
+    submit = SubmitField('Change Password')
+
+
 class RegistrationForm(BaseForm):
     email = EmailField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
