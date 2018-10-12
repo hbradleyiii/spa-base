@@ -7,10 +7,9 @@ app.app
 The app factory for spa-base.
 """
 
-from os import path
-
 from dotenv import load_dotenv
-from flask import Flask, redirect, request
+
+from flask import Flask
 from werkzeug.utils import find_modules, import_string
 
 from app import debug, logger, mail, models, routes

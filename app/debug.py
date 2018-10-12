@@ -9,6 +9,9 @@ helpful debugging utilities. This module is also responsible for properly
 handling static files when using `flask run`.
 """
 
+from os import path
+
+from flask import redirect, request
 from flask_debugtoolbar import DebugToolbarExtension
 
 
