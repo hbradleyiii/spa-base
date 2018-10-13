@@ -16,7 +16,8 @@ from flask_debugtoolbar import DebugToolbarExtension
 
 
 def init_app(app):
-    toolbar = DebugToolbarExtension(app)
+    if not app.testing:
+        toolbar = DebugToolbarExtension(app)
 
     # Support static files in development mode
     @app.before_request
