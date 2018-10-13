@@ -24,6 +24,9 @@ class Config(object):
     TESTING                  = _is_true(environ.get('TESTING', 'false'))
     SECRET_KEY               = environ.get('SECRET_KEY', '___change_me_please___')
 
+    DEBUG_TB_INTERCEPT_REDIRECTS = _is_true(environ.get('DEBUG_TB_INTERCEPT_REDIRECTS',
+                                                        'false'))
+
     SESSION_COOKIE_DOMAIN    = environ.get('SESSION_COOKIE_DOMAIN', None)
     SESSION_COOKIE_HTTPONLY  = _is_true(environ.get('SESSION_COOKIE_HTTPONLY', 'false'))
     SESSION_COOKIE_NAME      = environ.get('SESSION_COOKIE_NAME', 'session')
