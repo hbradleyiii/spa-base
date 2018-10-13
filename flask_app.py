@@ -14,7 +14,8 @@ from app.models import db, User
 app = create_app()
 cli.init_app(app)
 
-# Shell context for the command line environment
+
 @app.shell_context_processor
 def make_shell_context():
+    """Shell context for the command line environment."""
     return {'db': db, 'User': User}
