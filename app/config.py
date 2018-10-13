@@ -14,14 +14,14 @@ basedir = path.abspath(path.dirname(__file__))
 
 
 def _is_true(env_var):
-	return env_var.lower() in [1, 'true', 'yes']
+    return env_var.lower() in [1, 'true', 'yes']
 
 
 class Config(object):
     """The default config object."""
     FLASK_ENV                = environ.get('FLASK_ENV', 'production')
-    DEBUG                    = _is_true(environ.get('DEBUG', 'false'))
-    TESTIN                   = _is_true(environ.get('TESTING', 'false'))
+    DEBUG                    = _is_true(environ.get('FLASK_DEBUG', 'false'))
+    TESTING                  = _is_true(environ.get('TESTING', 'false'))
     SECRET_KEY               = environ.get('SECRET_KEY', '___change_me_please___')
 
     SESSION_COOKIE_DOMAIN    = environ.get('SESSION_COOKIE_DOMAIN', None)
