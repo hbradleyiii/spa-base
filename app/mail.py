@@ -17,10 +17,13 @@ mail = Mail()
 
 
 def send_mail(subject, sender, recipients, text_body, html_body,
-              send_async=True):
+              attachments=None, send_async=True):
     msg = Message(subject, sender=sender, recipients=recipients)
     msg.body = text_body
     msg.html = html_body
+    if attachments:
+        for attachment in attachments:
+            msg.attach(*attachment)
     if send_async:
         Thread(target=send_mail_async, args=(current_app._get_current_object(),
                                              msg)).start()
