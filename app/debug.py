@@ -15,11 +15,8 @@ from flask import redirect, request
 from flask_debugtoolbar import DebugToolbarExtension
 
 
-toolbar = DebugToolbarExtension()
-
-
 def init_app(app):
-    toolbar.init_app(app)
+    toolbar = DebugToolbarExtension(app)
 
     # Support static files in development mode
     @app.before_request
