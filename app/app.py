@@ -12,7 +12,13 @@ from dotenv import load_dotenv
 from flask import Flask
 from werkzeug.utils import find_modules, import_string
 
-from app import debug, logger, mail, models, routes
+from app import (
+    debug,
+    logger,
+    mail,
+    models,
+    routes,
+)
 from .config import Config as DefaultConfig
 from .middleware import HTTPMethodOverrideMiddleware
 
