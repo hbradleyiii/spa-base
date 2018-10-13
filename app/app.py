@@ -27,9 +27,11 @@ def create_app(Config = None):
     models.init_app(app)
     routes.init_app(app)
     mail.init_app(app)
-    logger.init_app(app)
 
-    if app.config['FLASK_ENV'] == 'development':
+    if not app.testing:
+        logger.init_app(app)
+
+    if app.debug:
         debug.init_app(app)
 
     return app
