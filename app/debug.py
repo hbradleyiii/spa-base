@@ -38,9 +38,3 @@ def init_app(app):
             request_path = request_path[1:]
         if path.isfile(basedir + '/static/' + request_path):
             return redirect('/static/' + request_path, 307)
-
-    # Shell context for the debug environment
-    @app.shell_context_processor
-    def make_shell_context():
-        from app.models import db, User
-        return {'db': db, 'User': User}
