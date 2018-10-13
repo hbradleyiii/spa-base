@@ -50,3 +50,4 @@ class Config(object):
 class TestingConfig(Config):
     """The testing config object."""
     TESTING = True
+    SQLALCHEMY_DATABASE_URI = 'sqlite://'
