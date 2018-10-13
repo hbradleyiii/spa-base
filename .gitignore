@@ -2,6 +2,7 @@
 *$py.class
 *.py[cod]
 *.db
+/.cache/
 /htdocs/css/
 /htdocs/js/
 /logs/
