@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 """
-app.app
-~~~~~~~
+app.factory
+~~~~~~~~~~~
 
 The app factory for spa-base.
 """

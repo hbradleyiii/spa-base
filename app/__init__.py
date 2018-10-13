@@ -13,7 +13,7 @@ app
 The flask app for spa-base
 """
 
-from .app import create_app
+from .factory import create_app
 
 
 __title__      = 'spa-base'
