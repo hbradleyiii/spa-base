@@ -19,7 +19,7 @@ from app import (
     models,
     routes,
 )
-from .config import Config as DefaultConfig
+from .config import Config as DefaultConfig, DebugConfig
 from .middleware import HTTPMethodOverrideMiddleware
 
 
@@ -28,7 +28,9 @@ def create_app(Config = None):
     load_dotenv()
     app = Flask(__name__)
     app.wsgi_app = HTTPMethodOverrideMiddleware(app.wsgi_app)
-    app.config.from_object(Config or DefaultConfig)
+    if not Config:
+        Config = DefaultConfig if not app.debug else DebugConfig
+    app.config.from_object(Config)
     register_blueprints(app)
     models.init_app(app)
     routes.init_app(app)
