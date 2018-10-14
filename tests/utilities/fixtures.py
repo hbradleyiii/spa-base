@@ -10,20 +10,28 @@ Fixtures for tests.
 import pytest
 
 
-@pytest.fixture()
+@pytest.fixture(scope='module')
 def app(request):
     """Creates and returns an app with its context."""
     from app import create_app
     from app.config import TestingConfig
-    from app.models import db
 
     app = create_app(TestingConfig)
     ctx = app.app_context()
     ctx.push()
     request.addfinalizer(ctx.pop)
-    db.create_all()
 
     return app
+
+
+@pytest.fixture(scope='function')
+def db(request):
+    from app.models import db
+
+    db.create_all()
+    yield db
+    db.session.remove()
+    db.drop_all()
 
 
 @pytest.fixture()
