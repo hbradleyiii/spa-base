@@ -10,7 +10,7 @@ Fixtures for tests.
 import pytest
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture()
 def app(request):
     """Creates and returns an app with its context."""
     from app import create_app
