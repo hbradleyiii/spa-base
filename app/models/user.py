@@ -30,9 +30,6 @@ class User(UserMixin, BaseModel):
     def __repr__(self):
         return '<User {}>'.format(self.email)
 
-    def set_password(self, password):
-        self.password_hash = generate_password_hash(password)
-
     @property
     def password(self):
         """Retrieving the password will only return the hash."""
