@@ -25,7 +25,7 @@ def app(request):
 
 
 @pytest.fixture(scope='function')
-def db(request):
+def db(app, request):
     from app.models import db
 
     db.create_all()
