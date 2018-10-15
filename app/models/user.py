@@ -45,6 +45,10 @@ class User(UserMixin, BaseModel):
             return False
         return check_password_hash(self.password_hash, password)
 
+    @property
+    def is_active(self):
+        return self.active
+
     def avatar(self, size):
         digest = md5(self.email.lower().encode('utf-8')).hexdigest()
         return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(
