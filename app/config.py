@@ -31,7 +31,7 @@ class Config(object):
     SESSION_COOKIE_SAMESITE  = environ.get('SESSION_COOKIE_SAMESITE', None)
     SESSION_COOKIE_SECURE    = _is_true(environ.get('SESSION_COOKIE_SECURE', 'false'))
 
-    SQLALCHEMY_DATABASE_URI  = environ.get('DATABASE_URL',
+    SQLALCHEMY_DATABASE_URI  = environ.get('DATABASE_URI',
         'sqlite:///' + path.join(basedir + '/../', 'app.db'))
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
