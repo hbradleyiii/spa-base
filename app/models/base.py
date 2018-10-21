@@ -16,3 +16,8 @@ migrate = Migrate()
 
 class BaseModel(db.Model):
     __abstract__ = True
+
+    def delete(self):
+        """Deletes this model instance."""
+        db.session.delete(self)
+        db.session.commit()
