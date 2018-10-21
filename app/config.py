@@ -7,10 +7,12 @@ app.config
 The app config for spa-base.
 """
 
+from dotenv import load_dotenv
 from os import environ, path
 
 
 basedir = path.abspath(path.dirname(__file__))
+load_dotenv()
 
 
 def _is_true(env_var):

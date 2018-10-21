@@ -7,7 +7,6 @@ app.factory
 The app factory for spa-base.
 """
 
-from dotenv import load_dotenv
 from flask import Flask
 from werkzeug.utils import find_modules, import_string
 
@@ -24,7 +23,6 @@ from .middleware import HTTPMethodOverrideMiddleware
 
 def create_app(Config = None):
     """Flask app factory function."""
-    load_dotenv()
     app = Flask(__name__)
     app.wsgi_app = HTTPMethodOverrideMiddleware(app.wsgi_app)
     if not Config:
