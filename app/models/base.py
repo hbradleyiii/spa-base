@@ -17,6 +17,12 @@ migrate = Migrate()
 class BaseModel(db.Model):
     __abstract__ = True
 
+    def save(self):
+        """Flushes this model to the database (as well as any other pending
+        changes)."""
+        db.session.add(self)
+        db.session.flush()
+
     def delete(self):
         """Deletes this model instance."""
         db.session.delete(self)
