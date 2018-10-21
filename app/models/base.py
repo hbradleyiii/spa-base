@@ -21,7 +21,7 @@ class BaseModel(db.Model):
         """Flushes this model to the database (as well as any other pending
         changes)."""
         db.session.add(self)
-        db.session.flush()
+        db.session.commit()
 
     def delete(self):
         """Deletes this model instance."""
