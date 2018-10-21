@@ -13,7 +13,12 @@ import click
 def init_app(app):
 
     @app.cli.command()
-    def test():
+    @click.option('--mysql/--no-mysql', '-m', default=False)
+    def test(mysql):
         """Runs the unit and feature tests for the app."""
-        if os.system('pytest ./tests/'):
-            raise RuntimeError('Tests could not be run.')
+        if mysql:
+            if os.system('TESTING_USE_DB=True pytest ./tests/'):
+                raise RuntimeError('Tests could not be run.')
+        else:
+            if os.system('pytest ./tests/'):
+                raise RuntimeError('Tests could not be run.')
