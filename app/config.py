@@ -58,4 +58,5 @@ class DebugConfig(Config):
 class TestingConfig(Config):
     """The testing config object."""
     TESTING = True
-    SQLALCHEMY_DATABASE_URI = 'sqlite://'
+    SQLALCHEMY_DATABASE_URI = environ.get('TEST_DATABASE_URI', 'sqlite://') \
+            if _is_true(environ.get('TESTING_USE_DB', 'false')) else 'sqlite://'
