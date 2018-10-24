@@ -43,17 +43,13 @@ def session(db):
     @see http://alexmic.net/flask-sqlalchemy-pytest/"""
     connection = db.engine.connect()
     transaction = connection.begin()
+    db.session.configure(bind=connection, binds={})
 
-    options = dict(bind=connection, binds={})
-    session = db.create_scoped_session(options=options)
-
-    db.session = session
-
-    yield session
+    yield db.session
 
     transaction.rollback()
     connection.close()
-    session.remove()
+    db.session.remove()
 
 
 @pytest.fixture()
