@@ -21,6 +21,10 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from .base import BaseModel, db, session
 
 
+class DuplicateEmailException(Exception):
+    pass
+
+
 class User(UserMixin, BaseModel):
     __tablename__ = 'users'
 
@@ -153,3 +157,60 @@ class User(UserMixin, BaseModel):
         except:
             return
         return User.query.join('emails').filter_by(email=email).first()
+
+
+class Email(BaseModel):
+    __tablename__ = 'emails'
+
+    __table_args__ = (
+        PrimaryKeyConstraint('email', 'user_id'),
+        ForeignKeyConstraint(
+            ['user_id'],
+            ['users.id'],
+            name='fk_email_user_id',
+            # When a user is deleted, delete all of the user's emails.
+            ondelete='CASCADE',
+            use_alter=True
+        ),
+    )
+
+    email = db.Column(db.String(128), index=True, unique=True)
+    user_id = db.Column(db.Integer)
+    verified = db.Column(db.Boolean, default=False)
+
+    def __init__(self, email=email, **kwargs):
+        """The constructor for the email model checks for duplicate emails. If
+        there is a duplicate, but it is not verified, the duplicate email is
+        deleted and this one is created. If the duplicate is already verified,
+        an DuplicateEmailException is thrown."""
+        duplicate_email_query = Email.query.filter_by(email=email)
+        duplicate_email = duplicate_email_query.first()
+        if duplicate_email:
+            if duplicate_email.verified:
+                raise DuplicateEmailException('This email has already '
+                                              'been claimed by another '
+                                              'account.')
+            else:
+                # Delete unverified duplicate emails. This will cascade and
+                # remove email as primary email.
+                duplicate_email.delete()
+        super().__init__(email=email, **kwargs)
+
+    def __str__(self):
+        """The email model's string representation is the string."""
+        return self.email
+
+    def __repr__(self):
+        """The email model's repr."""
+        return '<Email {} [{}]>'.format(self.email, self.user_id)
+
+    def __eq__(self, other):
+        """Comparison can be made to another Email object or a string."""
+        try:
+            return self.email == other or self.email == other.email
+        except AttributeError:
+            return False
+
+    def verify(self):
+        """Sets the email verified flag to True."""
+        self.update(verified=True)
