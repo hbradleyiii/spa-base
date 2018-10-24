@@ -158,6 +158,7 @@ def test_user_can_delete_emails(session):
                                                        'jane3@example.com'])
     # When the user attempts to remove an email
     user.emails[1].delete()
+    session.commit()
 
     # Then the email should no longer exist
     assert 'jane2@example.com' not in user.emails
