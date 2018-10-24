@@ -87,12 +87,25 @@ class User(UserMixin, BaseModel):
         if not self.primary_email_fk:
             email = Email.query.filter_by(user_id=self.id).first()
             if email:
-                self.primary_email_fk = email.email
+                self.primary_email_rel = email
         return self.primary_email_rel
 
     @primary_email.setter
     def primary_email(self, email):
-        self.primary_email_fk = email
+        if isinstance(email, Email):
+            self.primary_email_rel = email
+        else:
+            self.primary_email_fk = email
+
+    @property
+    def email(self):
+        """Proxy to primary_email field."""
+        return self.primary_email
+
+    @email.setter
+    def email(self, email):
+        """Proxy to set primary_email field."""
+        self.primary_email = email
 
     @property
     def password(self):
