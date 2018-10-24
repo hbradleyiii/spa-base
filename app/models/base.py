@@ -41,6 +41,11 @@ class BaseModel(db.Model):
         session.delete(self)
         self._flush()
 
+    def fresh(self):
+        """Returns a fresh instance of this model from the database."""
+        session.refresh(self)
+        return self
+
     def _flush(self):
         """Flushes any session changes to the database."""
         try:
