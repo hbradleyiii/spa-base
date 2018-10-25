@@ -106,14 +106,25 @@ def test_user_can_add_emails(session):
                        password='password123', email='jane1@example.com')
 
     # When an email is added using `add_email` method
-    user.add_email(email='jane2@example.com')
+    user.add_email('jane2@example.com')
     # Then that email should be accessible
     assert user.emails[1].email == 'jane2@example.com'
 
-    # When an email is added using SQLAlchemy's `append` method
-    user.emails.append(Email(email='jane3@example.com'))
+    # When an email is added using `add_email` method using keyword
+    user.add_email(email='jane3@example.com')
     # Then that email should be accessible
     assert user.emails[2].email == 'jane3@example.com'
+
+    # When a list of  emails is added using `add_email` method
+    user.add_email(emails=['jane4@example.com', 'jane5@example.com'])
+    # Then that email should be accessible
+    assert user.emails[3].email == 'jane4@example.com'
+    assert user.emails[4].email == 'jane5@example.com'
+
+    # When an email is added using SQLAlchemy's `append` method
+    user.emails.append(Email(email='jane6@example.com'))
+    # Then that email should be accessible
+    assert user.emails[5].email == 'jane6@example.com'
 
 def test_user_cannot_add_another_users_verified_email(session):
     """A user cannot add another users verified email address."""
