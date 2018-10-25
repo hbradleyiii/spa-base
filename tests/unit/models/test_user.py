@@ -171,7 +171,6 @@ def test_user_can_add_another_users_unverified_email(session):
     # Then the second user should now be the new owner
     assert 'jane@example.com' in user_2.emails
     assert 'jane@example.com' not in user_1.emails
-    assert user_1.primary_email != 'jane@example.com'
 
 def test_user_can_set_a_primary_email_from_their_emails(session):
     """A user has set a primary email from their emails. This attribute is also
