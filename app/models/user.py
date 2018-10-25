@@ -195,8 +195,7 @@ class Email(BaseModel):
                                               'been claimed by another '
                                               'account.')
             else:
-                # Delete unverified duplicate emails. This will cascade and
-                # remove email as primary email.
+                # Delete unverified duplicate emails.
                 duplicate_email.delete()
         super().__init__(email=email, **kwargs)
 
