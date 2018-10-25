@@ -79,6 +79,10 @@ class User(UserMixin, BaseModel):
         for email in emails:
             self.emails.append(Email(email=email))
 
+    def remove_email(self, email=None):
+        """Removes a single email (or a list of emails) to the user."""
+        Email.query.filter_by(email=email).first().delete()
+
     @property
     def name(self):
         """First and last name combined."""

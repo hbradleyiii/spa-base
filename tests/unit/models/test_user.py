@@ -126,6 +126,19 @@ def test_user_can_add_emails(session):
     # Then that email should be accessible
     assert user.emails[5].email == 'jane6@example.com'
 
+def test_user_can_remove_emails(session):
+    """A user can remove emails from their account."""
+    # Given a user with multiple emails
+    user = create_user(session, first_name='Jane', last_name='Doe',
+                       password='password123', email='jane1@example.com')
+
+    # When an email is removed
+    user.remove_email('jane1@example.com')
+    session.commit()
+
+    # Then that email should no longer be accessible
+    assert len(user.emails) == 0
+
 def test_user_cannot_add_another_users_verified_email(session):
     """A user cannot add another users verified email address."""
     # Given a user with a verified email and another user
