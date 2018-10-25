@@ -173,21 +173,6 @@ def test_user_can_add_another_users_unverified_email(session):
     assert 'jane@example.com' not in user_1.emails
     assert user_1.primary_email != 'jane@example.com'
 
-def test_user_can_delete_emails(session):
-    """A user can delete unwanted email addresses."""
-    # Given a user with multiple emails
-    user = create_user(session, first_name='Jane', last_name='Doe',
-                       password='password123', emails=['jane1@example.com',
-                                                       'jane2@example.com',
-                                                       'jane3@example.com'])
-    # When the user attempts to remove an email
-    user.emails[1].delete()
-    session.commit()
-
-    # Then the email should no longer exist
-    assert 'jane2@example.com' not in user.emails
-    assert Email.query.filter_by(email='jane2@example.com').count() == 0
-
 def test_user_can_set_a_primary_email_from_their_emails(session):
     """A user has set a primary email from their emails. This attribute is also
     accessible via teh email dynamic property."""
