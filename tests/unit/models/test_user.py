@@ -9,7 +9,11 @@ Feature tests for the user model.
 
 import pytest
 
-from app.models import DuplicateEmailException, Email, User
+from app.models import (
+    DuplicateEmailError,
+    Email,
+    User
+)
 from sqlalchemy.exc import IntegrityError
 from tests.utilities.fixtures import app, db, session
 from tests.utilities.decorators import requires_mysql
@@ -147,8 +151,8 @@ def test_user_cannot_add_another_users_verified_email(session):
                          password='password123', email='john@example.com')
 
     # When trying to add the first user's email on the second user
-    # Then expect a DuplicateEmailException
-    with pytest.raises(DuplicateEmailException):
+    # Then expect a DuplicateEmailError
+    with pytest.raises(DuplicateEmailError):
         user_2.add_email(email='jane@example.com')
 
 def test_user_can_add_another_users_unverified_email(session):

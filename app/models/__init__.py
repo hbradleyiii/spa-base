@@ -9,8 +9,8 @@ The models module for spa-base.
 
 from sqlalchemy.exc import DatabaseError
 
-from .base import BaseModel, db, migrate, session
-from .user import DuplicateEmailException, User
+from .base import BaseModel, db, IntegrityConstraintViolation, migrate, session
+from .user import DuplicateEmailError, Email, User
 
 
 def init_app(app):

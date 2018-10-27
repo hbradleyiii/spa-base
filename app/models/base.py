@@ -20,6 +20,10 @@ session = db.session
 migrate = Migrate()
 
 
+class IntegrityConstraintViolation(Exception):
+    pass
+
+
 class BaseModel(db.Model):
     __abstract__ = True
 

@@ -18,10 +18,10 @@ from sqlalchemy.orm import backref
 from time import time
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from .base import BaseModel, db, session
+from .base import BaseModel, db, IntegrityConstraintViolation, session
 
 
-class DuplicateEmailException(Exception):
+class DuplicateEmailError(IntegrityConstraintViolation):
     pass
 
 
@@ -191,9 +191,8 @@ class Email(BaseModel):
         duplicate_email = duplicate_email_query.first()
         if duplicate_email:
             if duplicate_email.verified:
-                raise DuplicateEmailException('This email has already '
-                                              'been claimed by another '
-                                              'account.')
+                raise DuplicateEmailError('This email has already been claimed'
+                                          ' by another account.')
             else:
                 # Delete unverified duplicate emails.
                 duplicate_email.delete()
