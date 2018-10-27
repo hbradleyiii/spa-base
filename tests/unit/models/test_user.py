@@ -31,9 +31,8 @@ def test_user_can_be_saved_to_database(session):
     user = User(first_name='Jane', last_name='Doe', password='password123',
                 email='jane@example.com')
 
-    # When a user is committed to the database
-    session.add(user)
-    session.commit()
+    # When a user is saved to the database
+    user.save()
 
     # Then a query should find it and it should be active
     user = session.query(User).filter_by(first_name='Jane').first()
@@ -50,9 +49,7 @@ def test_user_can_be_compared_to_another_user(session):
                        password='password123', email='_jane@example.com')
     user_2 = User(first_name='John', last_name='Smith', password='password123',
                   email='john@example.com')
-    session.add(user_1)
-    session.add(user_2)
-    session.commit()
+    user_1.save()
     user_1_copy.id = user_1.id
 
     # Then comparisons should be correct
@@ -175,21 +172,26 @@ def test_user_can_add_another_users_unverified_email(session):
 def test_user_can_set_a_primary_email_from_their_emails(session):
     """A user has set a primary email from their emails. This attribute is also
     accessible via teh email dynamic property."""
-    # Given a user with emails
+    # Given a user with verified emails
     user = create_user(session, first_name='Jane', last_name='Doe',
                        password='password123', email=None,
                        emails=['jane1@example.com', 'jane2@example.com',
                                'jane3@example.com'])
+    for email in user.emails:
+        email.verify()
+
     # When setting the primary email
     assert user.primary_email == 'jane1@example.com'
     # Then the primary email is accessible
     assert user.email == 'jane1@example.com'
 
     # When setting the primary email via the `email` property
-    user.email = 'email@example.com'
+    user.email = 'jane2@example.com'
+    session.commit()
+
     # Then the primary email is accessible
-    assert user.email == 'email@example.com'
-    assert user.primary_email == 'email@example.com'
+    assert user.email == 'jane2@example.com'
+    assert user.primary_email == 'jane2@example.com'
 
 @requires_mysql
 def test_users_primary_email_must_exist_in_email_table(session):
@@ -203,16 +205,15 @@ def test_users_primary_email_must_exist_in_email_table(session):
     # Then an IntegrityError should be thrown
     with pytest.raises(IntegrityError):
         user.email = 'new_email@example.com'
-        session.add(user)
-        session.flush()
+        user.save()
 
 @requires_mysql
-def test_user_cannot_set_primary_email_to_another_users_verified_email(session):
+def test_user_cannot_set_primary_email_to_another_users_email(session):
+    """A User cannot set a primary email to another user's email."""
     # Given 2 users and user_1 has an verified email
     user_1 = create_user(session, first_name='Jane', last_name='Doe',
                          password='password123', email='jane@example.com')
     user_1.emails[0].verify()
-
     user_2 = create_user(session, first_name='John', last_name='Doe',
                          password='password123', email='john@example.com')
 
@@ -220,16 +221,18 @@ def test_user_cannot_set_primary_email_to_another_users_verified_email(session):
     # Then an IntegrityError should be thrown
     with pytest.raises(IntegrityError):
         user_2.email = 'jane@example.com'
-        session.add(user_2)
-        session.flush()
+        user_2.save()
 
 @requires_mysql
-def test_users_primary_email_defaults_to_their_first_email(session):
+def test_users_primary_email_defaults_to_their_first_verified_email(session):
+    """When a user doesn't have a primary_email, their first verified email is
+    set to the primary email."""
     # Given a user with several emails
     user = create_user(session, first_name='Jane', last_name='Doe',
                        password='password123',
                        emails=['jane1@example.com', 'jane2@example.com',
                                'jane3@example.com'])
+
     # When a user's primary email is not set
     # Then the first email in the list is the default
     assert user.primary_email == 'jane1@example.com'
