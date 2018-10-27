@@ -22,9 +22,10 @@ def init_app(app):
         """Automatically commit database changes at the end of every successful
         request."""
         if response.status_code >= 400:
-            return
+            return response
         try:
             session.commit()
+            return response
         except DatabaseError:
             session.rollback()
             raise
