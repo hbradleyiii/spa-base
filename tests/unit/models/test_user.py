@@ -330,7 +330,6 @@ def test_an_email_cannot_be_changed_after_its_created_when_using_sql(session):
     requires a user_id."""
     # Given a user with an email
     user = create_user(session, email='jane@example.com')
-    user.save()
     session.commit()
 
     # When the user attempts to change the email
