@@ -17,9 +17,6 @@ The user's primary_email attribute can also be accessed and updated via the
 `email` proxy attribute. This allows the code to assume the user has one mail
 email, and not worry about managing multiple emails, making for more succinct
 code.
-
-Initially created with no primary email, after which it should have an email to
-be '?' {not active... something else?}
 """
 
 from flask import current_app
