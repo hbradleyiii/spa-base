@@ -12,6 +12,7 @@ import pytest
 from app.models import (
     DuplicateEmailError,
     Email,
+    IntegrityConstraintViolation,
     User
 )
 from sqlalchemy.exc import IntegrityError
@@ -240,3 +241,67 @@ def test_users_primary_email_defaults_to_their_first_verified_email(session):
     # When a user's primary email is not set
     # Then the first email in the list is the default
     assert user.primary_email == 'jane1@example.com'
+
+@requires_mysql
+def test_users_primary_email_returns_first_email_when_no_verified_emails_exist(session):
+    """Whan a user doesn't have a verified email, the primary_email property
+    will return the first email. However, it will not save this as the primary
+    email in the database."""
+    # Given a user with several emails
+    user = create_user(session, first_name='Jane', last_name='Doe',
+                       password='password123',
+                       emails=['jane1@example.com', 'jane2@example.com',
+                               'jane3@example.com'])
+    session.commit()
+
+    # When a user's primary email is not set
+    # Then the first email in the list is the default
+    assert user.primary_email == 'jane1@example.com'
+    assert user.primary_email_fk == None
+
+@requires_mysql
+def test_user_cannot_delete_their_primary_email(session):
+    """A User cannot delete their primary email."""
+    # Given a user with a primary email set
+    user = create_user(session, first_name='Jane', last_name='Doe',
+                       password='password123',
+                       emails=['jane1@example.com', 'jane2@example.com',
+                               'jane3@example.com'])
+    user.emails[0].verify()
+    user.email = 'jane1@example.com'
+    user.save()
+
+    # When attempting to delete this email
+    # Then expect an IntegrityError
+    with pytest.raises(IntegrityError):
+        user.emails[0].delete()
+
+def test_an_email_is_initially_created_unverified(session):
+    """An email is initially created unverified."""
+    # Given a user with an email
+    user = create_user(session, email='jane1@example.com')
+
+    # When the email has been initially created
+    # Then it should not yet be verified
+    assert not user.emails[0].verified
+
+def test_an_email_models_string_is_the_email(session):
+    """An email model's string is the email itself."""
+    # Given an email
+    email = Email(email='example@example.com')
+
+    # Then it's email is its string representation
+    assert str(email) == 'example@example.com'
+
+def test_an_email_cannot_be_changed_after_its_created(session):
+    """An email cannot be changed once created. It must be deleted and a new
+    email should then be added. Note that in order to be saved in the database,
+    the email must be created off a user since it requires a user_id."""
+    # Given a user with an email
+    user = create_user(session, email='jane@example.com')
+
+    # When the user attempts to change the email
+    # Then expect an error
+    with pytest.raises(IntegrityConstraintViolation):
+        user.emails[0].email = 'john@example.com'
+        user.emails[0].save()
