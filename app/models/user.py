@@ -244,6 +244,11 @@ class Email(BaseModel):
             raise IntegrityConstraintViolation('You cannot change the value of an existing email.')
         return email
 
+    @property
+    def is_verified(self):
+        """Returns the verified state. Useful for semantic conditionals."""
+        return self.verified
+
 event.listen(
     Email.__table__,
     'after_create',

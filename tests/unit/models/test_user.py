@@ -284,6 +284,7 @@ def test_an_email_is_initially_created_unverified(session):
     # When the email has been initially created
     # Then it should not yet be verified
     assert not user.emails[0].verified
+    assert not user.emails[0].is_verified
 
 def test_an_email_models_string_is_the_email(session):
     """An email model's string is the email itself."""
