@@ -210,7 +210,7 @@ event.listen(
                 THEN
                     SIGNAL SQLSTATE '45000' SET message_text = 'Primary email must exist in emails table and be a verified email.';
                 END IF;
-            END;"""))
+            END;""").execute_if(dialect='mysql'))
 
 
 class Email(BaseModel):
@@ -289,4 +289,4 @@ event.listen(
                 THEN
                     SIGNAL SQLSTATE '45000' SET message_text = 'Email is immutable and cannot be changed.';
                 END IF;
-            END;"""))
+            END;""").execute_if(dialect='mysql'))
