@@ -4,14 +4,35 @@
 app.models.user
 ~~~~~~~~~~~~~~~
 
-The User model for spa-base.
+The User and Email models for spa-base.
+
+In general, the Email model should not be accessed directly, rather it should
+be accessed in the context of a user model.
+
+Note that data constraints do not allow you to delete either an email or a user
+while the user has a primary email set. You must first set the primary email to
+Null (Python None). This is accomplished by using the User's `delete` method.
+
+The user's primary_email attribute can also be accessed and updated via the
+`email` proxy attribute. This allows the code to assume the user has one mail
+email, and not worry about managing multiple emails, making for more succinct
+code.
+
+Initially created with no primary email, after which it should have an email to
+be '?' {not active... something else?}
 """
 
 from flask import current_app
 from flask_login import UserMixin
 from hashlib import md5
 from jwt import encode as jwt_encode, decode as jwt_decode
-from sqlalchemy import CheckConstraint, ForeignKeyConstraint, PrimaryKeyConstraint
+from sqlalchemy import (
+    CheckConstraint,
+    DDL,
+    event,
+    ForeignKeyConstraint,
+    PrimaryKeyConstraint
+)
 from sqlalchemy.event import listens_for
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import backref, validates
@@ -222,3 +243,16 @@ class Email(BaseModel):
         if self.email and self.email != email:
             raise IntegrityConstraintViolation('You cannot change the value of an existing email.')
         return email
+
+event.listen(
+    Email.__table__,
+    'after_create',
+    DDL("""\
+        CREATE TRIGGER enforce_email_immutability_on_update BEFORE UPDATE ON emails
+            FOR EACH ROW
+            BEGIN
+                IF NEW.email != OLD.email OR NEW.user_id != OLD.user_id
+                THEN
+                    SIGNAL SQLSTATE '45000' SET message_text = 'Email is immutable and cannot be changed.';
+                END IF;
+            END;"""))
