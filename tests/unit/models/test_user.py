@@ -293,10 +293,11 @@ def test_an_email_models_string_is_the_email(session):
     # Then it's email is its string representation
     assert str(email) == 'example@example.com'
 
-def test_an_email_cannot_be_changed_after_its_created(session):
-    """An email cannot be changed once created. It must be deleted and a new
-    email should then be added. Note that in order to be saved in the database,
-    the email must be created off a user since it requires a user_id."""
+def test_an_email_cannot_be_changed_after_its_created_when_using_orm(session):
+    """An email cannot be changed once created. The ORM enforces this. It must
+    be deleted and a new email should then be added. Note that in order to be
+    saved in the database, the email must be created off a user since it
+    requires a user_id."""
     # Given a user with an email
     user = create_user(session, email='jane@example.com')
 
