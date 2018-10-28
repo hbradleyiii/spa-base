@@ -14,7 +14,7 @@ from jwt import encode as jwt_encode, decode as jwt_decode
 from sqlalchemy import CheckConstraint, ForeignKeyConstraint, PrimaryKeyConstraint
 from sqlalchemy.event import listens_for
 from sqlalchemy.ext.hybrid import hybrid_property
-from sqlalchemy.orm import backref
+from sqlalchemy.orm import backref, validates
 from time import time
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -216,3 +216,9 @@ class Email(BaseModel):
     def verify(self):
         """Sets the email verified flag to True."""
         self.update(verified=True)
+
+    @validates('email')
+    def protect_email(self, key, email):
+        if self.email and self.email != email:
+            raise IntegrityConstraintViolation('You cannot change the value of an existing email.')
+        return email
