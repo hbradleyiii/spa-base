@@ -275,6 +275,28 @@ class Email(BaseModel):
         """Returns the verified state. Useful for semantic conditionals."""
         return self.verified
 
+    @property
+    def verification_token(self, expires_in=1209600):
+        """Returns a signed email verification token that expires in
+        'expires_in' seconds (defaults to 1209600 or 14 days)."""
+        return jwt_encode({'email': self.email,
+                           'user_id': self.user_id,
+                           'exp': time() + expires_in},
+                          current_app.config['SECRET_KEY'],
+                          algorithm='HS256').decode('utf-8')
+
+    @staticmethod
+    def get_email_by_token(token):
+        """Returns the email matching the verification token."""
+        try:
+            decoded_token = jwt_decode(token, current_app.config['SECRET_KEY'],
+                                       algorithms=['HS256'])
+            email = decoded_token['email']
+            user_id = decoded_token['user_id']
+        except:
+            return None
+        return Email.query.filter_by(email=email, user_id=user_id).first()
+
 event.listen(
     Email.__table__,
     'after_create',

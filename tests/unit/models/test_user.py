@@ -339,3 +339,26 @@ def test_an_email_cannot_be_changed_after_its_created_when_using_sql(session):
     # Then expect an error
     with pytest.raises(OperationalError):
         session.connection().execute(query)
+
+def test_an_email_can_generate_verification_token(app, session):
+    """An email can generate a verification token."""
+    # Given an email (on a user) and that email's verification token
+    user = create_user(session, email='jane@example.com')
+    email_verification_token = user.emails[0].verification_token
+    #email_verification_token = user.email.verification_token
+
+    # When the token is verified
+    email_to_verify = Email.get_email_by_token(email_verification_token)
+
+    # Then it returns the email to verifiy
+    assert email_to_verify == 'jane@example.com'
+
+    # When the token is decoded
+    from jwt import decode as jwt_decode
+    decoded_token = jwt_decode(email_verification_token,
+                               app.config['SECRET_KEY'],
+                               algorithms=['HS256'])
+
+    # Then the email and user id should be accessible.
+    assert decoded_token['email'] == 'jane@example.com'
+    assert decoded_token['user_id'] == user.id
