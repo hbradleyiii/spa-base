@@ -136,6 +136,20 @@ class User(UserMixin, BaseModel):
         """Proxy to set primary_email field."""
         self.primary_email = email
 
+    @validates('primary_email_fk')
+    def protect_primary_email_fk(self, key, email_fk):
+        primary_email = None
+        for email in self.emails:
+            if email == email_fk:
+                primary_email = email
+                break
+        if not primary_email:
+            primary_email = Email.query.filter_by(email=email_fk).first()
+        if primary_email and not primary_email.is_verified:
+            raise IntegrityConstraintViolation('You cannot set primary email '
+                                               'to an unverified email.')
+        return email_fk
+
     @property
     def password(self):
         """Retrieving the password will only return the hash."""

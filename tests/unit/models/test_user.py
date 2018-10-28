@@ -198,6 +198,20 @@ def test_user_can_set_a_primary_email_from_their_emails(session):
     assert user.email == 'jane2@example.com'
     assert user.primary_email == 'jane2@example.com'
 
+def test_users_primary_email_must_be_verified__when_using_orm(session):
+    """A users primary email must be verified. The ORM will enforce this."""
+    # Given a user with unverified emails
+    user = create_user(session, first_name='Jane', last_name='Doe',
+                       password='password123', email=None,
+                       emails=['jane1@example.com', 'jane2@example.com',
+                               'jane3@example.com'])
+
+    # When the user attempts to change the primary_email_fk attribute
+    # Then expect an error
+    with pytest.raises(IntegrityConstraintViolation):
+        user.primary_email_fk = 'jane2@example.com'
+        user.save()
+
 @requires_mysql
 def test_users_primary_email_must_exist_in_email_table(session):
     """A user's primary email must exist as one of the emails in the email
