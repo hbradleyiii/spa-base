@@ -8,8 +8,7 @@ The app entry point for `flask` commands.
 """
 
 from app import cli, create_app
-from app.models import db, User
-
+from app.models import db, Email, User
 
 app = create_app()
 cli.init_app(app)
@@ -18,4 +17,4 @@ cli.init_app(app)
 @app.shell_context_processor
 def make_shell_context():
     """Shell context for the command line environment."""
-    return {'db': db, 'User': User}
+    return {'db': db, 'Email': Email, 'User': User}
