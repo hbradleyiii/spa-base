@@ -210,6 +210,22 @@ def test_users_primary_email_must_be_verified__when_using_orm(session):
         user.save()
 
 @requires_mysql
+def test_users_primary_email_must_be_verified__when_using_sql(session):
+    """A users primary email must be verified. The Database will enforce
+    this."""
+    # Given a user with an unverified email saved to the database
+    user = create_user(session, email='jane@example.com')
+    session.commit()
+
+    # When the user attempts to update the primary_email_fk column
+    query = User.__table__.update().where(User.id==user.id).\
+                values(primary_email_fk='jane@example.com')
+
+    # Then expect an error
+    with pytest.raises(OperationalError):
+        session.connection().execute(query)
+
+@requires_mysql
 def test_users_primary_email_must_exist_in_email_table(session):
     """A user's primary email must exist as one of the emails in the email
     table."""
@@ -219,7 +235,7 @@ def test_users_primary_email_must_exist_in_email_table(session):
 
     # When trying to set the primary email to a non-existing email
     # Then an IntegrityError should be thrown
-    with pytest.raises(IntegrityError):
+    with pytest.raises(OperationalError):
         user.email = 'new_email@example.com'
         user.save()
 

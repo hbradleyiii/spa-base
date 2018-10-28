@@ -197,6 +197,21 @@ class User(UserMixin, BaseModel):
             return
         return User.query.join('emails').filter_by(email=email).first()
 
+event.listen(
+    User.__table__,
+    'after_create',
+    DDL("""\
+        CREATE TRIGGER enforce_verified_primary_email_on_update BEFORE UPDATE ON users
+            FOR EACH ROW
+            BEGIN
+                IF (SELECT COUNT(email) FROM emails
+                        WHERE emails.email = NEW.primary_email_fk
+                        AND emails.verified = 1) != 1
+                THEN
+                    SIGNAL SQLSTATE '45000' SET message_text = 'Primary email must exist in emails table and be a verified email.';
+                END IF;
+            END;"""))
+
 
 class Email(BaseModel):
     __tablename__ = 'emails'
