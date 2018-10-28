@@ -92,10 +92,10 @@ def test_user_must_be_created_with_at_least_one_email(session):
 def test_user_can_have_more_than_one_email(session):
     """A user can be created with more than one email."""
     # Given a user with more than one email
-    user = create_user(session, first_name='Jane', last_name='Doe',
-                       password='password123', emails=['jane1@example.com',
-                                                       'jane2@example.com',
-                                                       'jane3@example.com'])
+    user = create_user(session, email=None, emails=['jane1@example.com',
+                                                    'jane2@example.com',
+                                                    'jane3@example.com'])
+
     # Then those emails should all be accessible
     assert user.emails[0].email == 'jane1@example.com'
     assert user.emails[1].email == 'jane2@example.com'
@@ -104,8 +104,7 @@ def test_user_can_have_more_than_one_email(session):
 def test_user_can_add_emails(session):
     """A user can add emails to their existing account."""
     # Given a user
-    user = create_user(session, first_name='Jane', last_name='Doe',
-                       password='password123', email='jane1@example.com')
+    user = create_user(session, email='jane1@example.com')
 
     # When an email is added using `add_email` method
     user.add_email('jane2@example.com')
@@ -131,8 +130,7 @@ def test_user_can_add_emails(session):
 def test_user_can_remove_emails(session):
     """A user can remove emails from their account."""
     # Given a user with multiple emails
-    user = create_user(session, first_name='Jane', last_name='Doe',
-                       password='password123', email='jane1@example.com')
+    user = create_user(session, email='jane1@example.com')
 
     # When an email is removed
     user.remove_email('jane1@example.com')
@@ -144,12 +142,10 @@ def test_user_can_remove_emails(session):
 def test_user_cannot_add_another_users_verified_email(session):
     """A user cannot add another users verified email address."""
     # Given a user with a verified email and another user
-    user_1 = create_user(session, first_name='Jane', last_name='Doe',
-                         password='password123', email='jane@example.com')
+    user_1 = create_user(session, email='jane@example.com')
     user_1.emails[0].verify()
 
-    user_2 = create_user(session, first_name='John', last_name='Doe',
-                         password='password123', email='john@example.com')
+    user_2 = create_user(session, email='john@example.com')
 
     # When trying to add the first user's email on the second user
     # Then expect a DuplicateEmailError
@@ -161,10 +157,8 @@ def test_user_can_add_another_users_unverified_email(session):
     haven't verified it, it's still up for grabs. This keeps someone from
     'holding' an email hostage."""
     # Given a user with an unverified email and another user
-    user_1 = create_user(session, first_name='Jane', last_name='Doe',
-                         password='password123', email='jane@example.com')
-    user_2 = create_user(session, first_name='John', last_name='Doe',
-                         password='password123', email='john@example.com')
+    user_1 = create_user(session, email='jane@example.com')
+    user_2 = create_user(session, email='john@example.com')
 
     # When second user tries to take the unverified email
     user_2.add_email(email='jane@example.com')
@@ -178,10 +172,9 @@ def test_user_can_set_a_primary_email_from_their_emails(session):
     """A user has set a primary email from their emails. This attribute is also
     accessible via teh email dynamic property."""
     # Given a user with verified emails
-    user = create_user(session, first_name='Jane', last_name='Doe',
-                       password='password123', email=None,
-                       emails=['jane1@example.com', 'jane2@example.com',
-                               'jane3@example.com'])
+    user = create_user(session, emails=['jane1@example.com',
+                                        'jane2@example.com',
+                                        'jane3@example.com'])
     for email in user.emails:
         email.verify()
 
@@ -230,8 +223,7 @@ def test_users_primary_email_must_exist_in_email_table(session):
     """A user's primary email must exist as one of the emails in the email
     table."""
     # Given a user
-    user = create_user(session, first_name='Jane', last_name='Doe',
-                       password='password123', email='jane@example.com')
+    user = create_user(session, email='jane@example.com')
 
     # When trying to set the primary email to a non-existing email
     # Then an IntegrityError should be thrown
@@ -243,11 +235,9 @@ def test_users_primary_email_must_exist_in_email_table(session):
 def test_user_cannot_set_primary_email_to_another_users_email(session):
     """A User cannot set a primary email to another user's email."""
     # Given 2 users and user_1 has an verified email
-    user_1 = create_user(session, first_name='Jane', last_name='Doe',
-                         password='password123', email='jane@example.com')
+    user_1 = create_user(session, email='jane@example.com')
     user_1.emails[0].verify()
-    user_2 = create_user(session, first_name='John', last_name='Doe',
-                         password='password123', email='john@example.com')
+    user_2 = create_user(session, email='john@example.com')
 
     # When user_2 tries to set user_1's verified email as a primary email
     # Then an IntegrityError should be thrown
@@ -260,10 +250,9 @@ def test_users_primary_email_defaults_to_their_first_verified_email(session):
     """When a user doesn't have a primary_email, their first verified email is
     set to the primary email."""
     # Given a user with several emails
-    user = create_user(session, first_name='Jane', last_name='Doe',
-                       password='password123',
-                       emails=['jane1@example.com', 'jane2@example.com',
-                               'jane3@example.com'])
+    user = create_user(session, email=None, emails=['jane1@example.com',
+                                                    'jane2@example.com',
+                                                    'jane3@example.com'])
 
     # When a user's primary email is not set
     # Then the first email in the list is the default
@@ -275,10 +264,9 @@ def test_users_primary_email_returns_first_email_when_no_verified_emails_exist(s
     will return the first email. However, it will not save this as the primary
     email in the database."""
     # Given a user with several emails
-    user = create_user(session, first_name='Jane', last_name='Doe',
-                       password='password123',
-                       emails=['jane1@example.com', 'jane2@example.com',
-                               'jane3@example.com'])
+    user = create_user(session, emails=['jane1@example.com',
+                                        'jane2@example.com',
+                                        'jane3@example.com'])
     session.commit()
 
     # When a user's primary email is not set
@@ -290,10 +278,9 @@ def test_users_primary_email_returns_first_email_when_no_verified_emails_exist(s
 def test_user_cannot_delete_their_primary_email(session):
     """A User cannot delete their primary email."""
     # Given a user with a primary email set
-    user = create_user(session, first_name='Jane', last_name='Doe',
-                       password='password123',
-                       emails=['jane1@example.com', 'jane2@example.com',
-                               'jane3@example.com'])
+    user = create_user(session, emails=['jane1@example.com',
+                                        'jane2@example.com',
+                                        'jane3@example.com'])
     user.emails[0].verify()
     user.email = 'jane1@example.com'
     user.save()
