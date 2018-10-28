@@ -15,7 +15,7 @@ from app.models import (
     IntegrityConstraintViolation,
     User
 )
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy.exc import IntegrityError, OperationalError
 from tests.utilities.fixtures import app, db, session
 from tests.utilities.decorators import requires_mysql
 from tests.utilities.helpers import create_user
@@ -306,3 +306,22 @@ def test_an_email_cannot_be_changed_after_its_created_when_using_orm(session):
     with pytest.raises(IntegrityConstraintViolation):
         user.emails[0].email = 'john@example.com'
         user.emails[0].save()
+
+@requires_mysql
+def test_an_email_cannot_be_changed_after_its_created_when_using_sql(session):
+    """An email cannot be changed once created. The database enforces this. It
+    must be deleted and a new email should then be added. Note that in order to
+    be saved in the database, the email must be created off a user since it
+    requires a user_id."""
+    # Given a user with an email
+    user = create_user(session, email='jane@example.com')
+    user.save()
+    session.commit()
+
+    # When the user attempts to change the email
+    query = Email.__table__.update().where(Email.email=='jane@example.com').\
+                values(email='jane_new@example.com')
+
+    # Then expect an error
+    with pytest.raises(OperationalError):
+        session.connection().execute(query)
