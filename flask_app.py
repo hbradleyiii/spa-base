@@ -17,4 +17,9 @@ cli.init_app(app)
 @app.shell_context_processor
 def make_shell_context():
     """Shell context for the command line environment."""
-    return {'db': db, 'Email': Email, 'User': User}
+    return {
+        'db': db,
+        'session': db.session,
+        'Email': Email,
+        'User': User
+    }
