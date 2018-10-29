@@ -257,6 +257,12 @@ def test_users_primary_email_defaults_to_their_first_verified_email(session):
     # When a user's primary email is not set
     # Then the first email in the list is the default
     assert user.primary_email == 'jane1@example.com'
+    assert user.email == 'jane1@example.com'
+
+    # When committing the database after retrieving the email
+    # Then the database does not try to save this unverified email
+    session.commit()  # (this would throw a database error)
+    assert user.primary_email_fk == None
 
 @requires_mysql
 def test_users_primary_email_returns_first_email_when_no_verified_emails_exist(session):
@@ -344,8 +350,7 @@ def test_an_email_can_generate_verification_token(app, session):
     """An email can generate a verification token."""
     # Given an email (on a user) and that email's verification token
     user = create_user(session, email='jane@example.com')
-    email_verification_token = user.emails[0].verification_token
-    #email_verification_token = user.email.verification_token
+    email_verification_token = user.email.verification_token
 
     # When the token is used to retrieve the email
     email_to_verify = Email.get_email_by_token(email_verification_token)

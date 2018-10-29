@@ -113,6 +113,8 @@ class User(UserMixin, BaseModel):
         if not self.primary_email_fk:
             email = Email.query.filter_by(user_id=self.id).first()
             if email:
+                if not email.is_verified:
+                    return email
                 self.primary_email_rel = email
         return self.primary_email_rel
 
