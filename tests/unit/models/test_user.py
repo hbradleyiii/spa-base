@@ -347,10 +347,10 @@ def test_an_email_can_generate_verification_token(app, session):
     email_verification_token = user.emails[0].verification_token
     #email_verification_token = user.email.verification_token
 
-    # When the token is verified
+    # When the token is used to retrieve the email
     email_to_verify = Email.get_email_by_token(email_verification_token)
 
-    # Then it returns the email to verifiy
+    # Then it returns the email to verify
     assert email_to_verify == 'jane@example.com'
 
     # When the token is decoded
