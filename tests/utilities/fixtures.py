@@ -17,7 +17,7 @@ def app():
     from app.config import TestingConfig
 
     app = create_app(TestingConfig)
-    ctx = app.app_context()
+    ctx = app.test_request_context()
     ctx.push()
 
     yield app
