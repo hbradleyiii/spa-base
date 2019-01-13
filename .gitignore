@@ -4,6 +4,7 @@
 *.db
 /.cache/
 /htdocs/css/
+/htdocs/icons/
 /htdocs/js/
 /logs/
 /node_modules/
