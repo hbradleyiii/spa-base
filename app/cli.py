@@ -29,6 +29,12 @@ def init_app(app):
         if os.system('./node_modules/.bin/svgo --config=./.svgo.yml assets/icons/*.svg -o htdocs/icons/'):
             raise RuntimeError('"svgo" command failed.')
 
+    @build.command()
+    def js():
+        """Compiles javascript files."""
+        if os.system('./node_modules/.bin/browserify assets/js/app.js -o ./htdocs/js/app.js'):
+            raise RuntimeError('"browserify" command failed.')
+
     @app.cli.command()
     @click.option('--mysql/--no-mysql', '-m', default=False)
     def test(mysql):
