@@ -12,6 +12,17 @@ import click
 
 def init_app(app):
 
+    @app.cli.group()
+    def build():
+        """Runs the build commands for the app."""
+        pass
+
+    @build.command()
+    def icons():
+        """Compresses icon svgs."""
+        if os.system('./node_modules/.bin/svgo --config=./.svgo.yml assets/icons/*.svg -o htdocs/icons/'):
+            raise RuntimeError('extract command failed')
+
     @app.cli.command()
     @click.option('--mysql/--no-mysql', '-m', default=False)
     def test(mysql):
