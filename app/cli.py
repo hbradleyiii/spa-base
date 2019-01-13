@@ -18,6 +18,12 @@ def init_app(app):
         pass
 
     @build.command()
+    def sass():
+        """Compiles sass files."""
+        if os.system('sassc -I ./node_modules/bulma assets/sass/app.scss htdocs/css/app.css'):
+            raise RuntimeError('extract command failed')
+
+    @build.command()
     def icons():
         """Compresses icon svgs."""
         if os.system('./node_modules/.bin/svgo --config=./.svgo.yml assets/icons/*.svg -o htdocs/icons/'):
