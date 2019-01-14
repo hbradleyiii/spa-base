@@ -27,6 +27,16 @@
         </nav>
     </header>
 
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="notification is-primary">
+                    <p>{{ message }}</p>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
     <main class="page-main container login-container">
         {% block content %}
         {% endblock %}
