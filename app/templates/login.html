@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+
+    <link rel="stylesheet" href="/static/css/login.css" media="all">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Libre+Franklin:400,400i,700">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700">
+
+    <title>Login to SPA-Base</title>
+</head>
+<body class="page">
+    <header class="page-header has-background-light">
+        <nav class="navbar container has-background-light" role="navigation" aria-label="main navigation">
+            <div class="navbar-brand">
+                <a class="navbar-item is-size-3" href="{{ url_for('index') }}">SPA-Base</a>
+            </div>
+
+            <div class="navbar-menu">
+                <div class="navbar-end">
+                    <div class="navbar-item">
+                        <a class="button is-primary" href="{{ url_for('auth.register') }}">Register</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="page-main container login-container">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer class="page-footer has-background-light">
+        <div class="container">
+            <nav class="navbar">
+                <a class="navbar-item" href="">Privacy Policy</a>
+                <a class="navbar-item" href="">Terms and Conditions</a>
+            </nav>
+            <p class="is-size-7">&copy; 2019 by <a href="https://haroldbradleyiii.com/">Harold Bradley III</a>. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
