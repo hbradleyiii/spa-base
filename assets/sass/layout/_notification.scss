@@ -1,0 +1,11 @@
+/**
+ * Notification layout styles
+ */
+.notification {
+    margin: 1em;
+    position: fixed;
+        top: 4em;
+        left: 50%;
+    transform: translate(-50%, 0);
+    z-index: 99;
+}
