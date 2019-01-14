@@ -70,7 +70,7 @@ def request_password_reset():
             flash('Check your email for the instructions to reset your password')
         return redirect(url_for('auth.login'))
     return render_template('auth/request_password_reset.html',
-                           title='Reset Password', form=form)
+                           title='Reset Your Password', form=form)
 
 
 @blueprint.route('/reset_password/<token>', methods=['GET', 'POST'])
