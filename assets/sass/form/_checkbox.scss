@@ -1,0 +1,62 @@
+/**
+ * Stylized checkbox.
+ */
+.checkbox {
+
+    // Hide the browser's input checkbox field
+    @at-root input#{&} {
+        display: inline-block;
+        opacity: 0;
+        outline: 0;
+        position: absolute;
+        user-select: none;
+    }
+
+    // The label will contain the "checkbox"
+    @at-root label#{&} {
+        line-height: 1.5rem;
+        padding-left: 2rem;
+        vertical-align: middle;
+
+        // Checkbox box
+        &:before {
+            border: .1rem solid #dbdbdb;
+            border-radius: 4px;
+            content: "";
+            height: 1.5rem;
+            position: absolute;
+                top: 0rem;
+                left: 0;
+            width: 1.5rem;
+
+            @at-root input[type="checkbox"].checkbox:hover:not([disabled]) + & {
+                border-color: #00d1b2;
+            }
+
+            @at-root input[type="checkbox"].checkbox:focus:not([disabled]) + & {
+                outline: 1px dotted #333;
+            }
+        }
+
+        // Checkbox checkmark
+        &:after {
+            border: .1rem solid #00d1b2;
+            border-left: 0;
+            border-top: none;
+            border-left: none;
+            box-sizing: border-box;
+            content: "";
+            display: none;
+            height: .75rem;
+            position: absolute;
+                top: .25rem;
+                left: .55rem;
+            transform: rotate(45deg);
+            width: .425rem;
+
+            @at-root input[type="checkbox"].checkbox:checked:not([disabled]) + & {
+                display: inline-block;
+            }
+        }
+    }
+}

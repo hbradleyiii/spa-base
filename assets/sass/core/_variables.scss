@@ -1,0 +1,20 @@
+/**
+ * SASS Variables
+ */
+@charset "utf-8";
+
+/**
+ * Load initial variables and functions.
+ */
+@import "sass/utilities/initial-variables";
+@import "sass/utilities/functions";
+
+
+/**
+ * Font Families
+ */
+$family-serif: "Libre Baskerville", serif;
+$family-sans-serif: "Libre Franklin", sans-serif;
+
+$family-primary: $family-sans-serif;
+$family-secondary: $family-serif;

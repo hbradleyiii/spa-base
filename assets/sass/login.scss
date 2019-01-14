@@ -1,0 +1,24 @@
+/**
+ * Login Styles for SPA-Base
+ */
+@charset "utf-8";
+
+@import "core/variables";
+@import "core/bulma";
+@import "core/bulma-extended/svg-icons";
+@import "core/classes";
+
+@import "form/field";
+@import "form/checkbox";
+
+@import "layout/page";
+
+
+.login-container {
+    display: flex;
+
+    & > .box {
+        margin: auto;
+        max-width: 22em;
+    }
+}

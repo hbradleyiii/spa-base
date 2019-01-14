@@ -1,0 +1,30 @@
+/**
+ * Page Styles
+ */
+
+.page {
+    display: flex;
+        flex-direction: column;
+    min-height: 100vh;
+}
+
+.page-header {
+    border-bottom: 1px solid $grey-lighter;
+}
+
+.page-main {
+    flex: 1;
+    margin-top: 2rem;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.page-footer {
+    border-top: 1px solid $grey-lighter;
+    padding: 1em;
+    text-align: center;
+
+    .navbar {
+        justify-content: center;
+    }
+}
