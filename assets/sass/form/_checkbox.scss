@@ -30,17 +30,18 @@
             width: 1.5rem;
 
             @at-root input[type="checkbox"].checkbox:hover:not([disabled]) + & {
-                border-color: #00d1b2;
+                border-color: #b5b5b5;
             }
 
             @at-root input[type="checkbox"].checkbox:focus:not([disabled]) + & {
-                outline: 1px dotted #333;
+                border-color: #3273dc;
+                box-shadow: 0 0 0 0.125em rgba(50, 115, 220, 0.25);
             }
         }
 
         // Checkbox checkmark
         &:after {
-            border: .1rem solid #00d1b2;
+            border: .1rem solid #3273dc;
             border-left: 0;
             border-top: none;
             border-left: none;
