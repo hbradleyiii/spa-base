@@ -22,7 +22,7 @@ def init_app(app):
         """Compiles sass files."""
         if os.system('sassc -I ./node_modules/bulma assets/sass/app.scss htdocs/css/app.css'):
             raise RuntimeError('"sassc" command failed.')
-        if os.system('sassc -I ./node_modules/bulma assets/sass/login.scss htdocs/css/login.css'):
+        if os.system('sassc -I ./node_modules/bulma assets/sass/auth.scss htdocs/css/auth.css'):
             raise RuntimeError('"sassc" command failed.')
 
     @build.command()
