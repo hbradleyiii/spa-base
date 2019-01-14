@@ -100,7 +100,7 @@ def register():
                     last_name=form.last_name.data)
         db.session.add(user)
         db.session.commit()
-        flash('Congratulations, you are now a registered user!')
+        flash('Congratulations, you are now a registered user! Please login to continue')
         return redirect(url_for('auth.login'))
     return render_template('auth/registration_form.html', title='Register',
                            form=form)
