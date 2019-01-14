@@ -19,9 +19,16 @@
 
             <div class="navbar-menu">
                 <div class="navbar-end">
+                    {% if request.path != url_for('auth.register') %}
                     <div class="navbar-item">
                         <a class="button is-primary" href="{{ url_for('auth.register') }}">Register</a>
                     </div>
+                    {% endif %}
+                    {% if request.path != url_for('auth.login') %}
+                    <div class="navbar-item">
+                        <a class="button is-primary" href="{{ url_for('auth.login') }}">Login</a>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
         </nav>
