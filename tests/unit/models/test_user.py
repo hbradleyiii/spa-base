@@ -9,13 +9,14 @@ Feature tests for the user model.
 
 import pytest
 
+from sqlalchemy.exc import IntegrityError, OperationalError
+
 from app.models import (
     DuplicateEmailError,
     Email,
     IntegrityConstraintViolation,
     User
 )
-from sqlalchemy.exc import IntegrityError, OperationalError
 from tests.utilities.fixtures import app, db, session
 from tests.utilities.decorators import requires_mysql
 from tests.utilities.helpers import create_user
