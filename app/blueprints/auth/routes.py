@@ -17,6 +17,7 @@ from flask import (
     url_for,
 )
 from flask_login import current_user, login_user, logout_user
+from werkzeug.security import check_password_hash
 from werkzeug.urls import url_parse
 
 from app.models import db, Email, User
@@ -32,6 +33,19 @@ from .mail import send_password_reset_mail
 blueprint = Blueprint('auth', __name__, template_folder='templates')
 
 
+def authenticate(user, password):
+    """A special authenticate function that helps to prevent timing attacks to
+    guess user accounts."""
+    if user is None:
+        check_password_hash('pbkdf2:sha256:50000$cvC3jxQC$fake0hash0' +
+                            'fake0hash0fake0hash0fake0hash0fake0hash' +
+                            'fake0hash0fake', 'fake_password')
+        return False
+    if not user.check_password(password):
+        return False
+    return True
+
+
 @blueprint.route('/login/', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
@@ -39,7 +53,7 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter(Email.email==form.email.data).first()
-        if user is None or not user.check_password(form.password.data):
+        if not authenticate(user, form.password.data):
             flash('Invalid email address or password')
             return redirect(url_for('auth.login'))
         login_user(user, remember=form.remember_me.data)
