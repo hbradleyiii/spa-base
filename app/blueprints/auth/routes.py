@@ -82,7 +82,10 @@ def request_password_reset():
         if user:
             send_password_reset_mail(user)
             flash('Check your email for the instructions to reset your password')
-        return redirect(url_for('auth.login'))
+            return redirect(url_for('auth.login'))
+        else:
+            flash('There isn\'t a registered user with this email address yet. Would you like to register now?')
+            return redirect(url_for('auth.register'))
     return render_template('auth/request_password_reset.html',
                            title='Reset Your Password', form=form)
 
