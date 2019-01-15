@@ -6,26 +6,32 @@
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Libre+Franklin:400,400i,700">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700">
-    <link rel="stylesheet" href="/static/css/app.css" media="all">
+    {% block styles %}
+    {% endblock %}
 
-    {% if title %}
-        <title>{{ title }} - SPA-Base</title>
-    {% else %}
-        <title>Welcome to SPA-Base</title>
-    {% endif %}
+    {% block title %}
+        {% if title %}
+            <title>{{ title }} - SPA-Base</title>
+        {% else %}
+            <title>Welcome to SPA-Base</title>
+        {% endif %}
+    {% endblock %}
 </head>
 <body class="page">
     {% include '/components/header.html' %}
 
     {% include '/components/flash-messages.html' %}
 
+    {% block main %}
     <main class="page-main container">
         {% block content %}
         {% endblock %}
     </main>
+    {% endblock %}
 
     {% include '/components/footer.html' %}
 
-    <script src="/js/app.js"></script>
+    {% block scripts %}
+    {% endblock %}
 </body>
 </html>

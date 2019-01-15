@@ -1,6 +1,16 @@
 {% extends "base.html" %}
 
 
+{% block styles %}
+    <link rel="stylesheet" href="/static/css/app.css" media="all">
+{% endblock %}
+
+
 {% block content %}
-    <h1>Index Page</h1>
+    <div id="app"></div>
+{% endblock %}
+
+
+{% block scripts %}
+    <script src="/js/app.js"></script>
 {% endblock %}

@@ -1,25 +1,14 @@
-<!DOCTYPE html>
-<html lang="en-US">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width">
+{% extends "base.html" %}
 
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Libre+Franklin:400,400i,700">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700">
+
+{% block styles %}
     <link rel="stylesheet" href="/static/css/auth.css" media="all">
+{% endblock %}
 
-    <title>{{ title }} - SPA-Base</title>
-</head>
-<body class="page">
-    {% include '/components/header.html' %}
 
-    {% include '/components/flash-messages.html' %}
-
+{% block main %}
     <main class="page-main container auth-container">
         {% block content %}
         {% endblock %}
     </main>
-
-    {% include '/components/footer.html' %}
-</body>
-</html>
+{% endblock %}
