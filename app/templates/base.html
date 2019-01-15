@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width">
 
-    <link rel="stylesheet" href="/static/css/app.css" media="all">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Libre+Franklin:400,400i,700">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700">
+    <link rel="stylesheet" href="/static/css/app.css" media="all">
 
     {% if title %}
     <title>{{ title }} - SPA-Base</title>
@@ -15,46 +15,16 @@
     {% endif %}
 </head>
 <body class="page">
-    <header class="page-header has-background-light">
-        <nav class="navbar container has-background-light" role="navigation" aria-label="main navigation">
-            <div class="navbar-brand">
-                <a class="navbar-item is-size-3" href="{{ url_for('index') }}">SPA-Base</a>
-            </div>
+    {% include '/components/header.html' %}
 
-            <div class="navbar-menu">
-                <div class="navbar-end">
-                    <form class="navbar-item" action="{{ url_for('auth.logout') }}" method="POST">
-                        <input class="button is-primary" type="submit" value="Logout">
-                    </form>
-                </div>
-            </div>
-        </nav>
-    </header>
-
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            {% for message in messages %}
-                <div class="notification is-primary">
-                    <p>{{ message }}</p>
-                </div>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
+    {% include '/components/flash-messages.html' %}
 
     <main class="page-main container">
         {% block content %}
         {% endblock %}
     </main>
 
-    <footer class="page-footer has-background-light">
-        <div class="container">
-            <nav class="navbar">
-                <a class="navbar-item" href="{{ url_for('pages.privacy_policy') }}">Privacy Policy</a>
-                <a class="navbar-item" href="{{ url_for('pages.terms_and_conditions') }}">Terms and Conditions</a>
-            </nav>
-            <p class="is-size-7">&copy; 2019 by <a href="https://haroldbradleyiii.com/">Harold Bradley III</a>. All rights reserved.</p>
-        </div>
-    </footer>
+    {% include '/components/footer.html' %}
 
     <script src="/js/app.js"></script>
 </body>

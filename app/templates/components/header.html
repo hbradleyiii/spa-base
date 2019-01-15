@@ -1,0 +1,28 @@
+    <header class="page-header has-background-light">
+        <nav class="navbar container has-background-light" role="navigation" aria-label="main navigation">
+            <div class="navbar-brand">
+                <a class="navbar-item is-size-3" href="{{ url_for('index') }}">SPA-Base</a>
+            </div>
+
+            <div class="navbar-menu">
+                <div class="navbar-end">
+                    {% if current_user.is_anonymous %}
+                        {% if request.path != url_for('auth.register') %}
+                            <div class="navbar-item">
+                                <a class="button is-primary" href="{{ url_for('auth.register') }}">Register</a>
+                            </div>
+                        {% endif %}
+                        {% if request.path != url_for('auth.login') %}
+                            <div class="navbar-item">
+                                <a class="button is-primary" href="{{ url_for('auth.login') }}">Login</a>
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        <form class="navbar-item" action="{{ url_for('auth.logout') }}" method="POST">
+                            <input class="button is-primary" type="submit" value="Logout">
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        </nav>
+    </header>
