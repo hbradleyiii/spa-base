@@ -36,7 +36,9 @@
                     </svg>
                     <svg id="show-password" class="icon is-right show-password"
                          aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                        <use href="/static/icons/zondicons.svg#view-hide"></use>
+                        <use href="/static/icons/zondicons.svg#view-hide"
+                             data-show-icon="/static/icons/zondicons.svg#view-show"
+                             data-hide-icon="/static/icons/zondicons.svg#view-hide"></use>
                     </svg>
                 </div>
                 {% for error in form.password.errors %}
@@ -53,4 +55,9 @@
         <p class="is-size-7"><a href="{{ url_for('auth.request_password_reset') }}">Forgot username/password?</a></p>
         <p class="is-size-7"><a href="{{ url_for('auth.register') }}">New user? Register now.</a></p>
     </div>
+{% endblock %}
+
+
+{% block scripts %}
+    <script src="/js/show-password.js"></script>
 {% endblock %}
