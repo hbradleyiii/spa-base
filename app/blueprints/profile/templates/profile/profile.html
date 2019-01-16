@@ -9,7 +9,7 @@
         </tr>
     </table>
     <hr>
-	{% if user == current_user %}
-		<p><a href="{{ url_for('profile.edit_profile') }}">Edit your profile</a></p>
-	{% endif %}
+    {% if user == current_user %}
+        <p><a href="{{ url_for('profile.edit_profile') }}">Edit your profile</a></p>
+    {% endif %}
 {% endblock %}
