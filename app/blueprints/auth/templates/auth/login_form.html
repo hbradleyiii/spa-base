@@ -25,7 +25,7 @@
 
             <div class="field">
                 {{ form.password.label }}
-                <div class="control has-icons-left">
+                <div class="control has-icons-left has-icons-right">
                     {% if form.password.errors %}
                         {{ form.password(size=32, class_="input is-danger") }}
                     {% else %}
@@ -33,6 +33,10 @@
                     {% endif %}
                     <svg class="icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                         <use href="/static/icons/zondicons.svg#lock-closed"></use>
+                    </svg>
+                    <svg id="show-password" class="icon is-right show-password"
+                         aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                        <use href="/static/icons/zondicons.svg#view-hide"></use>
                     </svg>
                 </div>
                 {% for error in form.password.errors %}
