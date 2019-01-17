@@ -20,7 +20,7 @@
 
         // Checkbox box
         &:before {
-            border: .1rem solid #dbdbdb;
+            border: 1px solid $input-border-color;
             border-radius: 4px;
             content: "";
             height: 1.5rem;
@@ -30,18 +30,18 @@
             width: 1.5rem;
 
             @at-root input[type="checkbox"].checkbox:hover:not([disabled]) + & {
-                border-color: #b5b5b5;
+                border-color: $input-hover-border-color;
             }
 
             @at-root input[type="checkbox"].checkbox:focus:not([disabled]) + & {
-                border-color: #3273dc;
-                box-shadow: 0 0 0 0.125em rgba(50, 115, 220, 0.25);
+                border-color: $input-focus-border-color;
+                box-shadow: $input-focus-box-shadow-size $input-focus-box-shadow-color;
             }
         }
 
         // Checkbox checkmark
         &:after {
-            border: .1rem solid #3273dc;
+            border: .1rem solid $link;
             border-left: 0;
             border-top: none;
             border-left: none;
