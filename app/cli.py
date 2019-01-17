@@ -7,8 +7,10 @@ app.cli
 The cli tools for spa-base.
 """
 
-import os
 import click
+import secrets
+import os
+
 
 def init_app(app):
 
@@ -40,7 +42,7 @@ def init_app(app):
     @build.command()
     def generate_key():
         """Creates a new randomly generated key."""
-        key = os.urandom(24).hex()
+        key = secrets.token_hex(24)
 
         # Ensure env file exists
         with open('./.env', 'a'): pass
