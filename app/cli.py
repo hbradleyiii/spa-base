@@ -37,6 +37,31 @@ def init_app(app):
         if os.system('./node_modules/.bin/browserify assets/js/app.js -o ./htdocs/js/app.js'):
             raise RuntimeError('"browserify" command failed.')
 
+    @build.command()
+    def generate_key():
+        """Creates a new randomly generated key."""
+        key = os.urandom(24).hex()
+
+        # Ensure env file exists
+        with open('./.env', 'a'): pass
+
+        # Load existing contents of ~/.env
+        with open('./.env', 'r') as env_file:
+            lines = env_file.readlines()
+
+        # Overwrite SECRET_KEY
+        for index, line in enumerate(lines):
+            if line.startswith('SECRET_KEY='):
+                lines[index] = 'SECRET_KEY=' + key + '\n'
+                break
+        else:
+            lines.append('SECRET_KEY=' + key)
+
+        # Save the file
+        with open('./.env', 'w') as env_file:
+            env_file.writelines(lines)
+
+
     @app.cli.command()
     @click.option('--mysql/--no-mysql', '-m', default=False)
     def test(mysql):
