@@ -7,12 +7,6 @@ app.blueprints.profile.forms
 The profile forms for spa-base.
 """
 
-from wtforms.fields import (
-    PasswordField,
-    StringField,
-    SubmitField,
-)
-from wtforms.fields.html5 import EmailField
 from wtforms.validators import (
     DataRequired,
     Email,
@@ -21,6 +15,12 @@ from wtforms.validators import (
 )
 
 from app.forms import BaseForm
+from app.forms.fields import (
+    EmailField,
+    PasswordField,
+    StringField,
+    SubmitField,
+)
 from app.models import User
 
 
