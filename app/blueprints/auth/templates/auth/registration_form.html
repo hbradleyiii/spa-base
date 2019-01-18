@@ -47,10 +47,16 @@
 
             <div class="field">
                 {{ form.password.label }}
-                <div class="control has-icons-left">
+                <div class="control has-icons-left has-icons-right">
                     {{ form.password(size=32, class_="input", error_class_="is-danger") }}
                     <svg class="icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                         <use href="/static/icons/zondicons.svg#lock-closed"></use>
+                    </svg>
+                    <svg id="show-password" class="icon is-right show-password"
+                         aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                        <use href="/static/icons/zondicons.svg#view-hide"
+                             data-show-icon="/static/icons/zondicons.svg#view-show"
+                             data-hide-icon="/static/icons/zondicons.svg#view-hide"></use>
                     </svg>
                 </div>
                 {% for error in form.password.errors %}
@@ -76,4 +82,9 @@
             </div>
         </form>
     </div>
+{% endblock %}
+
+
+{% block scripts %}
+    <script src="/js/show-password.js"></script>
 {% endblock %}

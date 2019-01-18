@@ -11,6 +11,7 @@
         var toggle_button = document.querySelector('#show-password');
         var toggle_icon = document.querySelector('#show-password use');
         var password_field = document.querySelector('#password');
+        var confirm_password_field = document.querySelector('#confirm_password');
 
         if (toggle_button == null || password_field == null) { return; }
 
@@ -20,10 +21,16 @@
                 if (toggle_icon) {
                     toggle_icon.setAttribute('href', toggle_icon.getAttribute('data-show-icon'));
                 }
+                if (confirm_password_field) {
+                    confirm_password_field.setAttribute('type', 'text');
+                }
             } else {
                 password_field.setAttribute('type', 'password');
                 if (toggle_icon) {
                     toggle_icon.setAttribute('href', toggle_icon.getAttribute('data-hide-icon'));
+                }
+                if (confirm_password_field) {
+                    confirm_password_field.setAttribute('type', 'password');
                 }
             }
         }, false);
