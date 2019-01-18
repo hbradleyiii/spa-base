@@ -368,3 +368,24 @@ def test_an_email_can_generate_verification_token(app, session):
     # Then the email and user id should be accessible.
     assert decoded_token['email'] == 'jane@example.com'
     assert decoded_token['user_id'] == user.id
+
+def test_user_can_generate_password_reset_token(app, session):
+    """A user can generate a password reset token."""
+    # Given a user and the user's password reset token
+    user = create_user(session, password='password123', email='jane@example.com')
+    password_reset_token = user.password_reset_token
+
+    # When the user is retrieved by password reset token
+    verified_user = User.verify_password_reset_token(password_reset_token)
+
+    # Then it returns the user to change the password
+    assert verified_user.id == user.id
+
+    # When the token is decoded
+    from jwt import decode as jwt_decode
+    decoded_token = jwt_decode(password_reset_token,
+                               app.config['SECRET_KEY'],
+                               algorithms=['HS256'])
+
+    # Then the user's email should be accessible.
+    assert decoded_token['password_reset_for_email'] == 'jane@example.com'

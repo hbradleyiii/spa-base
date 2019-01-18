@@ -183,7 +183,7 @@ class User(UserMixin, BaseModel):
     def password_reset_token(self, expires_in=600):
         """Returns a signed password reset token that expires in 'expires_in'
         seconds (defaults to 600)."""
-        return jwt_encode({'password_reset': self.email,
+        return jwt_encode({'password_reset_for_email': str(self.email),
                            'exp': time() + expires_in},
                           current_app.config['SECRET_KEY'],
                           algorithm='HS256').decode('utf-8')
@@ -193,7 +193,7 @@ class User(UserMixin, BaseModel):
         """Verifies that a provided password reset token is valid."""
         try:
             email = jwt_decode(token, current_app.config['SECRET_KEY'],
-                               algorithms=['HS256'])['password_reset']
+                               algorithms=['HS256'])['password_reset_for_email']
         except:
             return
         return User.query.join('emails').filter_by(email=email).first()
