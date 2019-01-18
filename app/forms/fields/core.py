@@ -38,7 +38,8 @@ class InputMixin(object):
                                    kwargs['error_class_']
             else:
                 kwargs['class_'] = kwargs['error_class_']
-        kwargs.pop('error_class_')
+        if 'error_class_' in kwargs:
+            kwargs.pop('error_class_')
         return super(InputMixin, self).__call__(**kwargs)
 
 
