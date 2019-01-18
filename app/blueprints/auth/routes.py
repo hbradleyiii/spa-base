@@ -27,7 +27,7 @@ from .forms import (
     RegistrationForm,
     RequestPasswordResetForm,
 )
-from .mail import send_password_reset_mail
+from .mail import send_email_verification_mail, send_password_reset_mail
 
 
 blueprint = Blueprint('auth', __name__, template_folder='templates')
@@ -117,7 +117,19 @@ def register():
                     last_name=form.last_name.data)
         db.session.add(user)
         db.session.commit()
+        send_email_verification_mail(user, user.email)
         flash('Congratulations, you are now a registered user! Please login to continue.')
         return redirect(url_for('auth.login'))
     return render_template('auth/registration_form.html', title='Register',
                            form=form)
+
+
+@blueprint.route('/verify_email/<token>', methods=['GET'])
+def verify_email(token):
+    email = Email.get_email_by_token(token)
+    if email:
+        email.verify()
+        flash('Your email is now verified!')
+    else:
+        flash('Something went wrong. Please try again.')
+    return redirect(url_for('auth.login'))
