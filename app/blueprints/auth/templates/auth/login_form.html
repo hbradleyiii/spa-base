@@ -9,11 +9,7 @@
             <div class="field">
                 {{ form.email.label }}
                 <div class="control has-icons-left">
-                    {% if form.email.errors %}
-                        {{ form.email(size=128, class_="input is-danger") }}
-                    {% else %}
-                        {{ form.email(size=128, class_="input") }}
-                    {% endif %}
+                    {{ form.email(size=128, class_="input", error_class_="is-danger") }}
                     <svg class="icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                         <use href="/static/icons/zondicons.svg#envelope"></use>
                     </svg>
@@ -26,11 +22,7 @@
             <div class="field">
                 {{ form.password.label }}
                 <div class="control has-icons-left has-icons-right">
-                    {% if form.password.errors %}
-                        {{ form.password(size=32, class_="input is-danger") }}
-                    {% else %}
-                        {{ form.password(size=32, class_="input") }}
-                    {% endif %}
+                    {{ form.password(size=32, class_="input", error_class_="is-danger") }}
                     <svg class="icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                         <use href="/static/icons/zondicons.svg#lock-closed"></use>
                     </svg>
@@ -48,7 +40,7 @@
 
             <div class="field control side-by-side">
                 {{ form.remember_me(class_="checkbox") }}
-                <label class="checkbox" for="{{ form.remember_me.id }}">{{ form.remember_me.label.text }}</label>
+                {{ form.remember_me.label(class_="checkbox") }}
                 {{ form.submit(class_="button is_primary") }}
             </div>
         </form>
