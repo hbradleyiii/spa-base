@@ -60,3 +60,7 @@ class TestingConfig(Config):
     TESTING = True
     SQLALCHEMY_DATABASE_URI = environ.get('TEST_DATABASE_URI', 'sqlite://') \
             if _is_true(environ.get('TESTING_USE_DB', 'false')) else 'sqlite://'
+
+    DEBUG_TB_INTERCEPT_REDIRECTS = False
+
+    WTF_CSRF_ENABLED = False
