@@ -4,7 +4,7 @@
 tests.models.test_user
 ~~~~~~~~~~~~~~~~~~~~~~
 
-Feature tests for the user model.
+Unit tests for the user model.
 """
 
 import pytest
