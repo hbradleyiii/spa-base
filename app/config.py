@@ -32,6 +32,16 @@ class Config(object):
     SESSION_COOKIE_PATH      = environ.get('SESSION_COOKIE_PATH', None)
     SESSION_COOKIE_SAMESITE  = environ.get('SESSION_COOKIE_SAMESITE', None)
     SESSION_COOKIE_SECURE    = _is_true(environ.get('SESSION_COOKIE_SECURE', 'false'))
+    SESSION_REFRESH_EACH_REQUEST = environ.get('SESSION_REFRESH_EACH_REQUEST', None)
+
+    REMEMBER_COOKIE_NAME     = environ.get('REMEMBER_COOKIE_NAME', 'remember_me')
+    REMEMBER_COOKIE_DURATION = environ.get('REMEMBER_COOKIE_DURATION', 5184000)
+    REMEMBER_COOKIE_DOMAIN   = environ.get('REMEMBER_COOKIE_DOMAIN', None)
+    REMEMBER_COOKIE_PATH     = environ.get('REMEMBER_COOKIE_PATH', None)
+    REMEMBER_COOKIE_SECURE   = environ.get('REMEMBER_COOKIE_SECURE', None)
+    REMEMBER_COOKIE_HTTP_ONLY = environ.get('REMEMBER_COOKIE_HTTP_ONLY', False)
+    REMEMBER_COOKIE_REFRESH_EACH_REQUEST = environ.get(
+        'REMEMBER_COOKIE_REFRESH_EACH_REQUEST', None)
 
     SQLALCHEMY_DATABASE_URI  = environ.get('DATABASE_URI',
         'sqlite:///' + path.join(basedir + '/../', 'app.db'))
