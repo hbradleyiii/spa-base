@@ -72,7 +72,9 @@ class User(UserMixin, BaseModel):
                                                 "User.primary_email_fk==Email.email)")
     active = db.Column(db.Boolean, default=True)
 
-    def __init__(self, email=None, emails=None, **kwargs):
+    def __init__(self, email=None, emails=None, anonymous=False, **kwargs):
+        if anonymous:
+            return super().__init__(**kwargs)
         if not email and not emails:
             raise ValueError('User must be instantiated with an email.')
         super().__init__(**kwargs)
