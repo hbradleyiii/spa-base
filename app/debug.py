@@ -11,7 +11,7 @@ handling static files when using `flask run`.
 
 from os import path
 
-from flask import redirect, request
+from flask import redirect, request, send_file
 from flask_debugtoolbar import DebugToolbarExtension
 
 
@@ -37,5 +37,7 @@ def init_app(app):
         request_path = request.path
         if request_path[0] == '/':
             request_path = request_path[1:]
+        if request_path == 'service-worker.js':
+            return send_file(basedir + '/static/service-worker.js')
         if path.isfile(basedir + '/static/' + request_path):
             return redirect('/static/' + request_path, 307)
