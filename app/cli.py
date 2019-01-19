@@ -32,6 +32,8 @@ def init_app(app):
         """Compresses icon svgs."""
         if os.system('./node_modules/.bin/svgo --config=./.svgo.yml assets/icons/*.svg -o htdocs/icons/'):
             raise RuntimeError('"svgo" command failed.')
+        if os.system('cp assets/icons/*.png htdocs/icons/ && ./node_modules/.bin/pngo htdocs/icons/*.png'):
+            raise RuntimeError('"svgo" command failed.')
 
     @build.command()
     def js():
