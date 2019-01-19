@@ -8,5 +8,6 @@
 /htdocs/js/
 /logs/
 /node_modules/
+/ssl/
 /venv/
 __pycache__/
