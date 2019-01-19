@@ -16,6 +16,7 @@ from app import (
     mail,
     models,
     routes,
+    templates,
 )
 from .config import Config as DefaultConfig, DebugConfig
 from .middleware import HTTPMethodOverrideMiddleware
@@ -31,6 +32,7 @@ def create_app(Config = None):
     register_blueprints(app)
     models.init_app(app)
     routes.init_app(app)
+    templates.init_app(app)
     mail.init_app(app)
 
     if not app.testing:
