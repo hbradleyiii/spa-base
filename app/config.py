@@ -55,6 +55,8 @@ class Config(object):
     ADMIN_EMAILS             = environ.get('ADMIN_EMAILS', '').split(',')
     SERVER_EMAIL             = environ.get('SERVER_EMAIL', None)
 
+    ONE_SIGNAL_APP_ID        = environ.get('ONE_SIGNAL_APP_ID', None)
+
     LOG_LEVEL                = environ.get('LOG_LEVEL', 'INFO')
     MAIL_LOG_LEVEL           = environ.get('MAIL_LOG_LEVEL', 'ERROR')
 

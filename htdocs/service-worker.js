@@ -2,6 +2,8 @@
  * SPA Base Service Worker
  */
 
+importScripts('https://cdn.onesignal.com/sdks/OneSignalSDKWorker.js');
+
 var version = 0.1;
 
 // Offline cache name
