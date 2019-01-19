@@ -2,11 +2,11 @@
     "name": "SPA Base",
     "short_name": "SPA Base",
     "description": "Single Page Application Base with Flask and Vue.",
-    "lang": "en-US"
+    "lang": "en-US",
     "start_url": "/?homescreen=1",
     "display": "standalone",
     "background_color": "#ffffff",
-    "theme_color": "#00d1b2"
+    "theme_color": "#00d1b2",
     "icons": [{
         "src": "icons/logo-16x16.png",
         "sizes": "16x16",
