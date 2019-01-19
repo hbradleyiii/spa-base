@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width">
 
+    {% include '/components/gtm-head.html' %}
+
     {% include '/components/meta.html' %}
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Libre+Franklin:400,400i,700">
@@ -23,6 +25,8 @@
     {% include '/components/onesignal.html' %}
 </head>
 <body class="page">
+    {% include '/components/gtm-body.html' %}
+
     {% include '/components/header.html' %}
 
     {% include '/components/flash-messages.html' %}

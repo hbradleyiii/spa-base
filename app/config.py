@@ -57,6 +57,8 @@ class Config(object):
 
     ONE_SIGNAL_APP_ID        = environ.get('ONE_SIGNAL_APP_ID', None)
 
+    GTM_ID                   = environ.get('GTM_ID', None)
+
     LOG_LEVEL                = environ.get('LOG_LEVEL', 'INFO')
     MAIL_LOG_LEVEL           = environ.get('MAIL_LOG_LEVEL', 'ERROR')
 
