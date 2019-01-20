@@ -224,8 +224,7 @@ class Email(BaseModel):
             ['users.id'],
             name='fk_email_user_id',
             # When a user is deleted, delete all of the user's emails.
-            ondelete='CASCADE',
-            use_alter=True
+            ondelete='CASCADE'
         ),
     )
 
