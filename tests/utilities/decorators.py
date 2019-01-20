@@ -5,15 +5,13 @@ tests.utilities.decorators
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Decorators for tests.
+
+Assumes fixtures are being loaded and load_dotenv() has been called.
 """
 
 from os import environ
 from warnings import warn
 
-from dotenv import load_dotenv
-
-
-load_dotenv()
 
 def requires_mysql(fn):
     def skip(*args, **kwargs):
