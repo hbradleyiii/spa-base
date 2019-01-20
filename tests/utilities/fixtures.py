@@ -7,7 +7,14 @@ tests.utilities.fixtures
 Fixtures for tests.
 """
 
+from os import environ
+
+from dotenv import load_dotenv
+from flask_migrate import upgrade
 import pytest
+
+
+load_dotenv()
 
 
 @pytest.fixture(scope='module')
@@ -27,12 +34,21 @@ def app():
 
 @pytest.fixture(scope='module')
 def db(app):
-    """Creates a new database for each test module."""
+    """Creates a new database for each test module.
+
+    When TESTING_USE_MIGRATIONS is set to true, this will also run a fresh
+    database migration."""
     from app.models import db
 
-    db.create_all()
+    if environ.get('TESTING_USE_MIGRATIONS', False):
+        upgrade('migrations', 'head')
+    else:
+        db.create_all()
 
     yield db
+
+    if environ.get('TESTING_USE_MIGRATIONS', False):
+        db.engine.execute('DROP TABLE IF EXISTS `alembic_version`;')
 
     db.drop_all()
 
