@@ -303,6 +303,113 @@ def test_user_cannot_delete_their_primary_email__using_sql(session):
     with pytest.raises(IntegrityError):
         user.emails[0].delete()
 
+@requires_mysql
+def test_a_user_cannot_set_their_primary_email_to_null__using_sql(session):
+    """A user cannot set their primary email to null."""
+    # Given a user with an email set as primary.
+    user = create_user(session, emails=['jane1@example.com',
+                                        'jane2@example.com',
+                                        'jane3@example.com'])
+    user.emails[0].verify()
+    user.email = 'jane1@example.com'
+    user.save()
+
+    # When attempting to delete this email
+    # Then expect an OperationalError
+    with pytest.raises(OperationalError):
+        user.email = None
+        user.save()
+
+@requires_mysql
+def test_a_user_can_be_deleted(session):
+    """When a user is deleted, the user's emails are also deleted."""
+    # Given a user with its corresponding id
+    user = create_user(session, email='jane@example.com')
+
+    user.save()
+    user_id = user.id
+
+    assert session.query(User).filter_by(id=user_id).count() == 1
+
+    # When the user is deleted
+    user.delete()
+
+    # Expect not to find the user.
+    assert session.query(User).filter_by(id=user_id).count() == 0
+
+@requires_mysql
+def test_when_a_user_is_deleted_their_emails_are_also_deleted(session):
+    """When a user is deleted, the user's emails are also deleted."""
+    # Given a user with multiple emails (none set as primary)
+    user = create_user(session, emails=['jane1@example.com',
+                                        'jane2@example.com',
+                                        'jane3@example.com'])
+
+    assert session.query(Email).filter_by(email='jane1@example.com').count() == 1
+    assert session.query(Email).filter_by(email='jane2@example.com').count() == 1
+    assert session.query(Email).filter_by(email='jane3@example.com').count() == 1
+
+    # When the user is deleted
+    user.delete()
+
+    # Expect not to find the emails.
+    assert session.query(Email).filter_by(email='jane1@example.com').count() == 0
+    assert session.query(Email).filter_by(email='jane2@example.com').count() == 0
+    assert session.query(Email).filter_by(email='jane3@example.com').count() == 0
+
+@requires_mysql
+def test_when_an_email_is_deleted_the_user_remains_untouched(session):
+    """When a user is deleted, the user's emails are also deleted."""
+    # Given a user with multiple email addresses
+    user = create_user(session, emails=['jane1@example.com',
+                                        'jane2@example.com',
+                                        'jane3@example.com'])
+    user.save()
+    user_id = user.id
+
+    # When one of those emails is deleted
+    session.query(Email).filter_by(email='jane1@example.com').delete()
+    assert session.query(Email).filter_by(email='jane1@example.com').count() == 0
+
+    # Expect the user to still be there
+    assert session.query(User).filter_by(id=user_id).count() == 1
+
+@requires_mysql
+def test_a_primary_email_cannot_be_deleted_using__the_sql(session):
+    """A primary email cannot be deleted. This is enforced in the SQL."""
+    # Given a user with a primary email set
+    user = create_user(session, emails=['jane1@example.com',
+                                        'jane2@example.com',
+                                        'jane3@example.com'])
+    user.emails[0].verify()
+    user.email = 'jane1@example.com'
+    user.save()
+
+    # When attempting to delete this primary email
+    # Then expect an IntegrityError
+    with pytest.raises(IntegrityError):
+        session.query(Email).filter_by(email='jane1@example.com').delete()
+
+@requires_mysql
+def test_a_user_with_a_primary_email_can_be_deleted(session):
+    """A user with a primary email can be deleted. This also deletes the
+    primary email."""
+    # Given a user with a primary email set
+    user = create_user(session, emails=['jane1@example.com',
+                                        'jane2@example.com',
+                                        'jane3@example.com'])
+    user.emails[0].verify()
+    user.email = 'jane1@example.com'
+    user.save()
+    user_id = user.id
+
+    # When deletin the user
+    user.delete()
+
+    # Then expect both the user and the email to be gone from the database
+    assert session.query(Email).filter_by(email='jane1@example.com').count() == 0
+    assert session.query(User).filter_by(id=user_id).count() == 0
+
 def test_an_email_is_initially_created_unverified(session):
     """An email is initially created unverified."""
     # Given a user with an email
