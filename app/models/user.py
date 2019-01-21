@@ -89,6 +89,11 @@ class User(UserMixin, BaseModel):
         """Compares user instances with other user instances."""
         return isinstance(other, User) and other.id == self.id
 
+    def delete(self):
+        """Deletes this user instance."""
+        self.update(primary_email_fk=None, active=False)
+        super().delete()
+
     def add_email(self, email=None, emails=None):
         """Adds a single email (or a list of emails) to the user."""
         emails = emails if emails else []
@@ -206,7 +211,8 @@ event.listen(
         CREATE TRIGGER enforce_verified_primary_email_on_update BEFORE UPDATE ON users
             FOR EACH ROW
             BEGIN
-                IF (SELECT COUNT(email) FROM emails
+                IF NOT (NEW.primary_email_fk IS NULL AND NEW.active = 0) AND
+                       (SELECT COUNT(email) FROM emails
                         WHERE emails.email = NEW.primary_email_fk
                         AND emails.verified = 1) != 1
                 THEN
