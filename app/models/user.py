@@ -89,10 +89,6 @@ class User(UserMixin, BaseModel):
         """Compares user instances with other user instances."""
         return isinstance(other, User) and other.id == self.id
 
-    def delete(self):
-        """Deletes this user."""
-        super().delete()
-
     def add_email(self, email=None, emails=None):
         """Adds a single email (or a list of emails) to the user."""
         emails = emails if emails else []
