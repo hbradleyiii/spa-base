@@ -91,7 +91,6 @@ class User(UserMixin, BaseModel):
 
     def delete(self):
         """Deletes this user."""
-        self.update(primary_email_fk=None)
         super().delete()
 
     def add_email(self, email=None, emails=None):
