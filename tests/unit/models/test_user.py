@@ -156,7 +156,10 @@ def test_user_cannot_add_another_users_verified_email(session):
 def test_user_can_add_another_users_unverified_email(session):
     """A user *can* add another user's unverified email address. If they
     haven't verified it, it's still up for grabs. This keeps someone from
-    'holding' an email hostage."""
+    'holding' an email hostage.
+
+    Note that in the database, the old row is removed and a new row is
+    created."""
     # Given a user with an unverified email and another user
     user_1 = create_user(session, email='jane@example.com')
     user_2 = create_user(session, email='john@example.com')
@@ -205,7 +208,7 @@ def test_users_primary_email_must_be_verified__when_using_orm(session):
 
 @requires_mysql
 def test_users_primary_email_must_be_verified__when_using_sql(session):
-    """A users primary email must be verified. The Database will enforce
+    """A users primary email must be verified. The Database will also enforce
     this."""
     # Given a user with an unverified email saved to the database
     user = create_user(session, email='jane@example.com')
@@ -249,7 +252,10 @@ def test_user_cannot_set_primary_email_to_another_users_email(session):
 @requires_mysql
 def test_users_primary_email_defaults_to_their_first_verified_email(session):
     """When a user doesn't have a primary_email, their first verified email is
-    set to the primary email."""
+    set to the primary email.
+
+    NOTE: This means that, from the ORM's perspective, a primary_email might be
+    unverified."""
     # Given a user with several emails
     user = create_user(session, email=None, emails=['jane1@example.com',
                                                     'jane2@example.com',
@@ -282,9 +288,9 @@ def test_users_primary_email_returns_first_email_when_no_verified_emails_exist(s
     assert user.primary_email_fk == None
 
 @requires_mysql
-def test_user_cannot_delete_their_primary_email(session):
+def test_user_cannot_delete_their_primary_email__using_sql(session):
     """A User cannot delete their primary email."""
-    # Given a user with a primary email set
+    # Given a user with an email set as primary.
     user = create_user(session, emails=['jane1@example.com',
                                         'jane2@example.com',
                                         'jane3@example.com'])
@@ -315,11 +321,14 @@ def test_an_email_models_string_is_the_email(session):
     # Then it's email is its string representation
     assert str(email) == 'example@example.com'
 
-def test_an_email_cannot_be_changed_after_its_created_when_using_orm(session):
+def test_an_email_cannot_be_changed_after_its_created__when_using_orm(session):
     """An email cannot be changed once created. The ORM enforces this. It must
     be deleted and a new email should then be added. Note that in order to be
     saved in the database, the email must be created off a user since it
-    requires a user_id."""
+    requires a user_id.
+
+    NOTE: It may be a good idea to make this transparent to the user from a UX
+    standpoint."""
     # Given a user with an email
     user = create_user(session, email='jane@example.com')
 
@@ -330,7 +339,7 @@ def test_an_email_cannot_be_changed_after_its_created_when_using_orm(session):
         user.emails[0].save()
 
 @requires_mysql
-def test_an_email_cannot_be_changed_after_its_created_when_using_sql(session):
+def test_an_email_cannot_be_changed_after_its_created__when_using_sql(session):
     """An email cannot be changed once created. The database enforces this. It
     must be deleted and a new email should then be added. Note that in order to
     be saved in the database, the email must be created off a user since it
