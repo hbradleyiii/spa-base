@@ -66,10 +66,10 @@ class User(UserMixin, BaseModel):
                              cascade='all, delete-orphan',
                              backref='user')
     primary_email_fk = db.Column('primary_email_fk', db.String(128), nullable=True,
-                               unique=True)
+                                 unique=True)
     primary_email_rel = db.relationship('Email', uselist=False, lazy="joined",
-                                    primaryjoin="and_(User.id==Email.user_id, "
-                                                "User.primary_email_fk==Email.email)")
+                                        primaryjoin="and_(User.id==Email.user_id, "
+                                                    "User.primary_email_fk==Email.email)")
     active = db.Column(db.Boolean, default=True)
 
     def __init__(self, email=None, emails=None, anonymous=False, **kwargs):
