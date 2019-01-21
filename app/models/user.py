@@ -73,6 +73,7 @@ class User(UserMixin, BaseModel):
     active = db.Column(db.Boolean, default=True)
 
     def __init__(self, email=None, emails=None, anonymous=False, **kwargs):
+        """User constructor. Enforces creation with at least one email."""
         if anonymous:
             return super().__init__(**kwargs)
         if not email and not emails:
@@ -81,13 +82,15 @@ class User(UserMixin, BaseModel):
         self.add_email(email=email, emails=emails)
 
     def __repr__(self):
+        """User repr."""
         return '<User {} [{}]>'.format(self.name, self.id)
 
     def __eq__(self, other):
+        """Compares user instances with other user instances."""
         return isinstance(other, User) and other.id == self.id
 
     def delete(self):
-        """ """
+        """Deletes this user."""
         self.update(primary_email_fk=None)
         super().delete()
 
@@ -122,6 +125,8 @@ class User(UserMixin, BaseModel):
 
     @primary_email.setter
     def primary_email(self, email):
+        """Property that is an email instance that is represented by the
+        primary_email_fk."""
         if isinstance(email, Email):
             self.primary_email_rel = email
         else:
@@ -139,6 +144,7 @@ class User(UserMixin, BaseModel):
 
     @validates('primary_email_fk')
     def protect_primary_email_fk(self, key, email_fk):
+        """Validator for the primary_email_fk."""
         primary_email = None
         for email in self.emails:
             if email == email_fk:
@@ -269,6 +275,7 @@ class Email(BaseModel):
 
     @validates('email')
     def protect_email(self, key, email):
+        """Validator for the email property. Enforces email immutability."""
         if self.email and self.email != email:
             raise IntegrityConstraintViolation('You cannot change the value of an existing email.')
         return email
