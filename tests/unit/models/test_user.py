@@ -249,7 +249,6 @@ def test_user_cannot_set_primary_email_to_another_users_email(session):
         user_2.email = 'jane@example.com'
         user_2.save()
 
-@requires_mysql
 def test_users_primary_email_defaults_to_their_first_verified_email(session):
     """When a user doesn't have a primary_email, their first verified email is
     set to the primary email.
@@ -271,7 +270,6 @@ def test_users_primary_email_defaults_to_their_first_verified_email(session):
     session.commit()  # (this would throw a database error)
     assert user.primary_email_fk == None
 
-@requires_mysql
 def test_users_primary_email_returns_first_email_when_no_verified_emails_exist(session):
     """Whan a user doesn't have a verified email, the primary_email property
     will return the first email. However, it will not save this as the primary
@@ -320,7 +318,6 @@ def test_a_user_cannot_set_their_primary_email_to_null__using_sql(session):
         user.email = None
         user.save()
 
-@requires_mysql
 def test_a_user_can_be_deleted(session):
     """When a user is deleted, the user's emails are also deleted."""
     # Given a user with its corresponding id
@@ -337,7 +334,6 @@ def test_a_user_can_be_deleted(session):
     # Expect not to find the user.
     assert session.query(User).filter_by(id=user_id).count() == 0
 
-@requires_mysql
 def test_when_a_user_is_deleted_their_emails_are_also_deleted(session):
     """When a user is deleted, the user's emails are also deleted."""
     # Given a user with multiple emails (none set as primary)
@@ -357,7 +353,6 @@ def test_when_a_user_is_deleted_their_emails_are_also_deleted(session):
     assert session.query(Email).filter_by(email='jane2@example.com').count() == 0
     assert session.query(Email).filter_by(email='jane3@example.com').count() == 0
 
-@requires_mysql
 def test_when_an_email_is_deleted_the_user_remains_untouched(session):
     """When a user is deleted, the user's emails are also deleted."""
     # Given a user with multiple email addresses
@@ -390,7 +385,6 @@ def test_a_primary_email_cannot_be_deleted_using__the_sql(session):
     with pytest.raises(IntegrityError):
         session.query(Email).filter_by(email='jane1@example.com').delete()
 
-@requires_mysql
 def test_a_user_with_a_primary_email_can_be_deleted(session):
     """A user with a primary email can be deleted. This also deletes the
     primary email."""
