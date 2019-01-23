@@ -41,9 +41,7 @@ def authenticate(user, password):
         check_password_hash('pbkdf2:sha256:50000$' + secrets.token_hex(8) + '$'
                             + secrets.token_hex(63), secrets.token_hex(13))
         return False
-    if not user.check_password(password):
-        return False
-    return True
+    return user.check_password(password)
 
 
 @blueprint.route('/login/', methods=['GET', 'POST'])
