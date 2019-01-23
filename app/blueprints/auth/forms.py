@@ -8,6 +8,7 @@ The auth forms for spa-base.
 """
 
 from flask_wtf.recaptcha import RecaptchaField
+from flask_wtf.recaptcha.validators import Recaptcha
 from wtforms.validators import (
     DataRequired,
     Email,
@@ -36,7 +37,8 @@ class LoginForm(BaseForm):
 class RequestPasswordResetForm(BaseForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     submit = SubmitField('Request Password Reset')
-    recaptcha = RecaptchaField()
+    recaptcha = RecaptchaField(validators=[
+                               Recaptcha('Please click this box to show you are not a bot.')])
 
 
 class PasswordResetForm(BaseForm):
@@ -54,7 +56,8 @@ class RegistrationForm(BaseForm):
                                      validators=[DataRequired(), EqualTo('password')])
     first_name = StringField('First Name', validators=[DataRequired()])
     last_name = StringField('Last Name', validators=[DataRequired()])
-    recaptcha = RecaptchaField()
+    recaptcha = RecaptchaField(validators=[
+                               Recaptcha('Please click this box to show you are not a bot.')])
     submit = SubmitField('Register')
 
     def validate_email(self, email):
