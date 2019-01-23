@@ -59,6 +59,9 @@ class Config(object):
 
     GTM_ID                   = environ.get('GTM_ID', None)
 
+    RECAPTCHA_PUBLIC_KEY     = environ.get('RECAPTCHA_PUBLIC_KEY', None)
+    RECAPTCHA_PRIVATE_KEY    = environ.get('RECAPTCHA_PRIVATE_KEY', None)
+
     LOG_LEVEL                = environ.get('LOG_LEVEL', 'INFO')
     MAIL_LOG_LEVEL           = environ.get('MAIL_LOG_LEVEL', 'ERROR')
 
