@@ -7,6 +7,7 @@ app.blueprints.auth.forms
 The auth forms for spa-base.
 """
 
+from flask_wtf.recaptcha import RecaptchaField
 from wtforms.validators import (
     DataRequired,
     Email,
@@ -35,6 +36,7 @@ class LoginForm(BaseForm):
 class RequestPasswordResetForm(BaseForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     submit = SubmitField('Request Password Reset')
+    recaptcha = RecaptchaField()
 
 
 class PasswordResetForm(BaseForm):
@@ -52,6 +54,7 @@ class RegistrationForm(BaseForm):
                                      validators=[DataRequired(), EqualTo('password')])
     first_name = StringField('First Name', validators=[DataRequired()])
     last_name = StringField('Last Name', validators=[DataRequired()])
+    recaptcha = RecaptchaField()
     submit = SubmitField('Register')
 
     def validate_email(self, email):
