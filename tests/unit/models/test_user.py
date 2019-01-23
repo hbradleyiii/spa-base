@@ -183,8 +183,11 @@ def test_user_can_set_a_primary_email_from_their_emails(session):
         email.verify()
 
     # When setting the primary email
-    assert user.primary_email == 'jane1@example.com'
+    user.primary_email = 'jane1@example.com'
+    session.commit()
+
     # Then the primary email is accessible
+    assert user.primary_email == 'jane1@example.com'
     assert user.email == 'jane1@example.com'
 
     # When setting the primary email via the `email` property
