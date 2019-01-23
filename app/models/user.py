@@ -155,8 +155,14 @@ class User(UserMixin, BaseModel):
 
     @email.setter
     def email(self, email):
-        """Proxy to set primary_email field."""
-        self.primary_email = email
+        """Proxy to set primary_email field. Also, works like add_email if the
+        email is not already one of this user's emails. At this point, the
+        email will not be set as a primary_email since it will not have been
+        verified yet."""
+        if email in self.emails:
+            self.primary_email = email
+        else:
+            self.add_email(email)
 
     @validates('primary_email_fk')
     def protect_primary_email_fk(self, key, email_fk):

@@ -128,6 +128,17 @@ def test_user_can_add_emails(session):
     # Then that email should be accessible
     assert user.emails[5].email == 'jane6@example.com'
 
+def test_user_can_use_the_email_property_to_add_emails(session):
+    """A user can use the email property to add emails to their existing
+    account."""
+    user = create_user(session, email='jane1@example.com')
+
+    # When an email is added using `add_email` method
+    user.email = 'jane2@example.com'
+
+    # Then that email should be accessible
+    assert user.emails[1].email == 'jane2@example.com'
+
 def test_user_can_remove_emails(session):
     """A user can remove emails from their account."""
     # Given a user with multiple emails
@@ -264,7 +275,7 @@ def test_users_primary_email_must_exist_in_email_table(session):
     # When trying to set the primary email to a non-existing email
     # Then an IntegrityError should be thrown
     with pytest.raises(OperationalError):
-        user.email = 'new_email@example.com'
+        user.primary_email = 'new_email@example.com'
         user.save()
 
 @requires_mysql
@@ -278,7 +289,7 @@ def test_user_cannot_set_primary_email_to_another_users_email(session):
     # When user_2 tries to set user_1's verified email as a primary email
     # Then an IntegrityError should be thrown
     with pytest.raises(IntegrityError):
-        user_2.email = 'jane@example.com'
+        user_2.primary_email = 'jane@example.com'
         user_2.save()
 
 def test_users_primary_email_defaults_to_their_first_verified_email(session):
@@ -325,7 +336,7 @@ def test_user_cannot_delete_their_primary_email__using_sql(session):
                                         'jane2@example.com',
                                         'jane3@example.com'])
     user.emails[0].verify()
-    user.email = 'jane1@example.com'
+    user.primary_email = 'jane1@example.com'
     user.save()
 
     # When attempting to delete this email
@@ -341,13 +352,13 @@ def test_a_user_cannot_set_their_primary_email_to_null__using_sql(session):
                                         'jane2@example.com',
                                         'jane3@example.com'])
     user.emails[0].verify()
-    user.email = 'jane1@example.com'
+    user.primary_email = 'jane1@example.com'
     user.save()
 
     # When attempting to delete this email
     # Then expect an OperationalError
     with pytest.raises(OperationalError):
-        user.email = None
+        user.primary_email = None
         user.save()
 
 def test_a_user_can_be_deleted(session):
@@ -409,7 +420,7 @@ def test_a_primary_email_cannot_be_deleted_using__the_sql(session):
                                         'jane2@example.com',
                                         'jane3@example.com'])
     user.emails[0].verify()
-    user.email = 'jane1@example.com'
+    user.primary_email = 'jane1@example.com'
     user.save()
 
     # When attempting to delete this primary email
@@ -425,7 +436,7 @@ def test_a_user_with_a_primary_email_can_be_deleted(session):
                                         'jane2@example.com',
                                         'jane3@example.com'])
     user.emails[0].verify()
-    user.email = 'jane1@example.com'
+    user.primary_email = 'jane1@example.com'
     user.save()
     user_id = user.id
 
