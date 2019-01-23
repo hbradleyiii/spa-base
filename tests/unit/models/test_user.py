@@ -172,6 +172,35 @@ def test_user_can_add_another_users_unverified_email(session):
     assert 'jane@example.com' in user_2.emails
     assert 'jane@example.com' not in user_1.emails
 
+def test_primary_email_property_returns_first_verified_email_if_not_set(session):
+    """A user's primary email propery returns the first verified email if the
+    primary email is not yet set."""
+    # Given a user with multiple emails, some verified
+    user = create_user(session, emails=['jane1@example.com',
+                                        'jane2@example.com',
+                                        'jane3@example.com',
+                                        'jane4@example.com'])
+    user.emails[2].verify()
+    user.emails[3].verify()
+    session.commit()
+
+    # When accessing the primary_email property
+    # Then expect it to be the first verified email
+    assert user.primary_email == 'jane3@example.com'
+
+def test_primary_email_property_returns_first_email_if_not_set_and_no_verified(session):
+    """A user's primary email propery returns the first email if the primary
+    email is not yet set and none of the emails are verified."""
+    # Given a user with no verified emails
+    user = create_user(session, emails=['jane1@example.com',
+                                        'jane2@example.com',
+                                        'jane3@example.com',
+                                        'jane4@example.com'])
+
+    # When accessing the primary_email property
+    # Then expect it to be the first verified email
+    assert user.primary_email == 'jane1@example.com'
+
 def test_user_can_set_a_primary_email_from_their_emails(session):
     """A user has set a primary email from their emails. This attribute is also
     accessible via the email dynamic property."""

@@ -126,13 +126,17 @@ class User(UserMixin, BaseModel):
     @hybrid_property
     def primary_email(self):
         """Attempts to retrieve primary email. If it is none, will attempt to
-        get and set the user's first email as primary email."""
+        get and set the user's first email that is verified or the first email
+        as primary email."""
         if not self.primary_email_fk:
-            email = Email.query.filter_by(user_id=self.id).first()
-            if email:
-                if not email.is_verified:
-                    return email
-                self.primary_email_rel = email
+            first_verified_email = None
+            for email in self.emails:
+                if email.is_verified:
+                    first_verified_email = email
+                    break
+            if not first_verified_email:
+                return self.emails[0] if len(self.emails) > 0 else None
+            self.primary_email_rel = first_verified_email
         return self.primary_email_rel
 
     @primary_email.setter
