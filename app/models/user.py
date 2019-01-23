@@ -18,6 +18,17 @@ The user's primary_email attribute can also be accessed and updated via the
 `email` proxy attribute. This allows the code to assume the user has one mail
 email, and not worry about managing multiple emails, making for more succinct
 code.
+
+The User is initially created with no primary email. This is because a primary
+email *must* be a verified email and the user doesn't yet have a verified
+email. At this state, the user is unconfirmed (is_confirmed will return false).
+When the user verifies the email *and* this email is set as the primary email,
+the user will then be confirmed.
+
+The User cannot delete their primary email, hence, it is not possible for the
+user to 'unconfirm' their account. In order to delete their primary email, they
+must first add another email, then confirm it, then set it as primary. The
+original email can then be deleted.
 """
 
 from flask import current_app
