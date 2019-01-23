@@ -37,9 +37,11 @@ blueprint = Blueprint('auth', __name__, template_folder='templates')
 def authenticate(user, password):
     """A special authenticate function that helps to prevent timing attacks to
     guess user accounts."""
+    fake_hash = 'pbkdf2:sha256:50000$' + secrets.token_hex(8) + '$' \
+                + secrets.token_hex(63)
+    fake_password = secrets.token_hex(13)
     if user is None:
-        check_password_hash('pbkdf2:sha256:50000$' + secrets.token_hex(8) + '$'
-                            + secrets.token_hex(63), secrets.token_hex(13))
+        check_password_hash(fake_hash, fake_password)
         return False
     return user.check_password(password)
 
