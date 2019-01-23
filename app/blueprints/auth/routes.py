@@ -17,6 +17,7 @@ from flask import (
     url_for,
 )
 from flask_login import current_user, login_user, logout_user
+import secrets
 from werkzeug.security import check_password_hash
 from werkzeug.urls import url_parse
 
@@ -37,9 +38,8 @@ def authenticate(user, password):
     """A special authenticate function that helps to prevent timing attacks to
     guess user accounts."""
     if user is None:
-        check_password_hash('pbkdf2:sha256:50000$cvC3jxQC$fake0hash0' +
-                            'fake0hash0fake0hash0fake0hash0fake0hash' +
-                            'fake0hash0fake', 'fake_password')
+        check_password_hash('pbkdf2:sha256:50000$' + secrets.token_hex(8) + '$'
+                            + secrets.token_hex(63), secrets.token_hex(13))
         return False
     if not user.check_password(password):
         return False
