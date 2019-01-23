@@ -460,6 +460,29 @@ def test_an_email_cannot_be_changed_after_its_created__when_using_sql(session):
     with pytest.raises(OperationalError):
         session.connection().execute(query)
 
+def test_user_has_is_confirmed_property_set_to_false_initially(session):
+    """An email model's string is the email itself."""
+    # Given a user with an email
+    user = create_user(session, email='jane@example.com')
+    session.commit()
+
+    # When initially checking its is_confirmed property
+    # Then it should be false
+    assert user.is_confirmed == False
+
+def test_user_is_confirmed_property_set_to_true_after_verifying_email(session):
+    """An email model's string is the email itself."""
+    # Given a user with an email
+    user = create_user(session, email='jane@example.com')
+
+    # When the user verifies its email and sets it as primary
+    user.emails[0].verify()
+    user.primary_email = user.emails[0]
+    user.save()
+
+    # Then it should be confirmed
+    assert user.is_confirmed == True
+
 def test_an_email_can_generate_verification_token(app, session):
     """An email can generate a verification token."""
     # Given an email (on a user) and that email's verification token

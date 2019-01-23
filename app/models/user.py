@@ -179,6 +179,16 @@ class User(UserMixin, BaseModel):
         """Returns the active state. Useful for semantic conditionals."""
         return self.active
 
+    @property
+    def confirmed(self):
+        """Returns true if the user has a verified primary email"""
+        return self.primary_email_fk != None
+
+    @property
+    def is_confirmed(self):
+        """Returns the confirmed state. Useful for semantic conditionals."""
+        return self.confirmed
+
     def avatar(self, size):
         """Returns a url for a gravatar.com avatar based on the user's primary
         email."""
