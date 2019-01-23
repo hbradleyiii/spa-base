@@ -11,7 +11,8 @@ be accessed in the context of a user model.
 
 Note that data constraints do not allow you to delete either an email or a user
 while the user has a primary email set. You must first set the primary email to
-Null (Python None). This is accomplished by using the User's `delete` method.
+Null (Python None) and the active state to 0. This is accomplished by using the
+User's `delete` method.
 
 The user's primary_email attribute can also be accessed and updated via the
 `email` proxy attribute. This allows the code to assume the user has one mail
