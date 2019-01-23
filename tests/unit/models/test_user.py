@@ -174,7 +174,7 @@ def test_user_can_add_another_users_unverified_email(session):
 
 def test_user_can_set_a_primary_email_from_their_emails(session):
     """A user has set a primary email from their emails. This attribute is also
-    accessible via teh email dynamic property."""
+    accessible via the email dynamic property."""
     # Given a user with verified emails
     user = create_user(session, emails=['jane1@example.com',
                                         'jane2@example.com',
