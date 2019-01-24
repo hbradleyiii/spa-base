@@ -9,7 +9,7 @@
             <div class="field">
                 {{ form.email.label }}
                 <div class="control has-icons-left">
-                    {{ form.email(size=128, class_="input", error_class_="is-danger") }}
+                    {{ form.email(size=128, class_="input", value=request.form.email, error_class_="is-danger") }}
                     <svg class="icon" role="img" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                         <use href="/icons/zondicons.svg#envelope"></use>
                     </svg>
