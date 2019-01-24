@@ -55,7 +55,7 @@ def login():
         user = User.query.filter(Email.email==form.email.data).first()
         if not authenticate(user, form.password.data):
             flash('Invalid email address or password')
-            return redirect(url_for('auth.login'))
+            return render_template('auth/login_form.html', title='Login', form=form)
         login_user(user, remember=form.remember_me.data)
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
