@@ -70,7 +70,7 @@ def session(db):
     db.session.remove()
 
 
-@pytest.fixture()
+@pytest.fixture(scope='module')
 def client(app):
     """Creates and returns an app client for testing."""
     app.test_client_class = Client
