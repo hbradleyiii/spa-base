@@ -80,4 +80,4 @@ class TestingConfig(Config):
 
     DEBUG_TB_INTERCEPT_REDIRECTS = False
 
-    WTF_CSRF_ENABLED = False
+    PRESERVE_CONTEXT_ON_EXCEPTION = False

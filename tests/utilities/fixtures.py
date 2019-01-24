@@ -13,6 +13,8 @@ from dotenv import load_dotenv
 from flask_migrate import upgrade
 import pytest
 
+from .client import Client
+
 
 load_dotenv()
 
@@ -71,7 +73,8 @@ def session(db):
 @pytest.fixture()
 def client(app):
     """Creates and returns an app client for testing."""
-    client = app.test_client()
+    app.test_client_class = Client
+    client = app.test_client(app=app)
     client.__enter__()
 
     yield client
