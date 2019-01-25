@@ -17,8 +17,8 @@ from app.models import (
     IntegrityConstraintViolation,
     User
 )
-from tests.utilities.fixtures import app, db, session
 from tests.utilities.decorators import requires_mysql
+from tests.utilities.fixtures import app, db, session
 from tests.utilities.helpers import create_user
 
 
