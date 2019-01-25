@@ -68,11 +68,15 @@ def init_app(app):
 
     @app.cli.command()
     @click.option('--mysql/--no-mysql', '-m', default=False)
-    def test(mysql):
+    @click.option('--use-migrations/--no-use-migrations', '-u', default=False)
+    def test(mysql, use_migrations):
         """Runs the unit and feature tests for the app."""
+        command = 'pytest ./tests/'
+
         if mysql:
-            if os.system('TESTING_USE_DB=True pytest ./tests/'):
-                raise RuntimeError('Tests could not be run.')
-        else:
-            if os.system('pytest ./tests/'):
-                raise RuntimeError('Tests could not be run.')
+            command = 'TESTING_USE_DB=True ' + command
+        if use_migrations:
+            command = 'TESTING_USE_MIGRATIONS=True ' + command
+
+        if os.system(command):
+            raise RuntimeError('Tests could not be run.')
