@@ -11,7 +11,7 @@ from flask_wtf.recaptcha import RecaptchaField
 from flask_wtf.recaptcha.validators import Recaptcha
 from wtforms.validators import (
     DataRequired,
-    Email,
+    Email as EmailValidator,
     EqualTo,
     ValidationError,
 )
@@ -24,18 +24,19 @@ from app.forms.fields import (
     StringField,
     SubmitField,
 )
-from app.models import User
+from app.models import Email, User
 
 
 class LoginForm(BaseForm):
-    email = EmailField('Email Address', validators=[DataRequired(), Email()])
+    email = EmailField('Email Address', validators=[DataRequired(),
+                                                    EmailValidator()])
     password = PasswordField('Password', validators=[DataRequired()])
     remember_me = BooleanField('Remember Me')
     submit = SubmitField('Login')
 
 
 class RequestPasswordResetForm(BaseForm):
-    email = StringField('Email', validators=[DataRequired(), Email()])
+    email = StringField('Email', validators=[DataRequired(), EmailValidator()])
     submit = SubmitField('Request Password Reset')
     recaptcha = RecaptchaField(validators=[
                                Recaptcha('Please click this box to show you are not a bot.')])
@@ -50,7 +51,7 @@ class PasswordResetForm(BaseForm):
 
 
 class RegistrationForm(BaseForm):
-    email = EmailField('Email', validators=[DataRequired(), Email()])
+    email = EmailField('Email', validators=[DataRequired(), EmailValidator()])
     password = PasswordField('Password', validators=[DataRequired()])
     confirm_password = PasswordField('Confirm Password',
                                      validators=[DataRequired(), EqualTo('password')])
@@ -61,7 +62,7 @@ class RegistrationForm(BaseForm):
     submit = SubmitField('Register')
 
     def validate_email(self, email):
-        user = User.query.filter_by(email=email.data).first()
-        if user is not None:
+        duplicate_email = Email.query.filter_by(email=email.data, verified=True).first()
+        if duplicate_email is not None:
             raise ValidationError('A user with this email has already ' + \
                 'registered. Did you forget your password?')
