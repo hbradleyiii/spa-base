@@ -28,7 +28,11 @@ from .forms import (
     RegistrationForm,
     RequestPasswordResetForm,
 )
-from .mail import send_email_verification_mail, send_password_reset_mail
+from .mail import (
+    send_email_not_found_mail,
+    send_email_verification_mail,
+    send_password_reset_mail,
+)
 
 
 blueprint = Blueprint('auth', __name__, template_folder='templates')
@@ -78,14 +82,14 @@ def request_password_reset():
         return redirect(url_for('index'))
     form = RequestPasswordResetForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
-        if user:
-            send_password_reset_mail(user)
-            flash('Check your email for the instructions to reset your password')
-            return redirect(url_for('auth.login'))
+        email = Email.query.filter_by(email=form.email.data).first()
+        if email:
+            send_password_reset_mail(email.user)
         else:
-            flash('There isn\'t a registered user with this email address yet. Would you like to register now?')
-            return redirect(url_for('auth.register'))
+            send_email_not_found_mail(form.email.data)
+        flash('Check your email for instructions to reset your password or to'
+              ' register for an account if you don\'t already have one.')
+        return redirect(url_for('auth.login'))
     return render_template('auth/request_password_reset.html',
                            title='Reset Your Password', form=form)
 
