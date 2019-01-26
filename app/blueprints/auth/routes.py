@@ -92,11 +92,9 @@ def request_password_reset():
 
 @blueprint.route('/reset_password/<token>', methods=['GET', 'POST'])
 def password_reset(token):
-    if current_user.is_authenticated:
-        return redirect(url_for('index'))
     user = User.verify_password_reset_token(token)
     if not user:
-        return redirect(url_for('index'))
+        return redirect(url_for('auth.request_password_reset'))
     form = PasswordResetForm()
     if form.validate_on_submit():
         user.password = form.password.data
