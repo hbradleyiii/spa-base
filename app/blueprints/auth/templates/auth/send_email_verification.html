@@ -1,0 +1,22 @@
+{% extends "auth.html" %}
+
+
+{% block content %}
+    <div class="box">
+        <h1 class="title is-4">Please check your email</h1>
+        <p>We sent a confirmation email to <a href="mailto:{{ email }}">{{ email }}</a>
+        Please click on the link provided in the email to verify your email
+        address.</p>
+        <p>If you do not see the message within a few minutes, check your spam
+        folder. We sent the message from
+        <a href="mailto:{{ config['SERVER_EMAIL'] }}">
+            {{ config['SERVER_EMAIL'] }}
+        </a></p>
+
+        <div>
+            <a href="{{ url_for('auth.send_email_verification') }}">Resend the email.</a>
+            <br>
+            <a href="{{ url_for('auth.change_email') }}">Change or update your email.</a>
+        </div>
+    </div>
+{% endblock %}
