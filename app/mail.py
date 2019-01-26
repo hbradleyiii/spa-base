@@ -24,7 +24,8 @@ def send_mail(subject, sender, recipients, text_body, html_body,
     if attachments:
         for attachment in attachments:
             msg.attach(*attachment)
-    if send_async:
+
+    if send_async and not send_mail.testing:
         Thread(target=send_mail_async, args=(current_app._get_current_object(),
                                              msg)).start()
     else:
@@ -38,3 +39,4 @@ def send_mail_async(app, msg):
 
 def init_app(app):
     mail.init_app(app)
+    send_mail.testing = app.testing
