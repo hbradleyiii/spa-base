@@ -117,13 +117,32 @@ def register():
         user = User(email=form.email.data, password=form.password.data,
                     first_name=form.first_name.data,
                     last_name=form.last_name.data)
-        db.session.add(user)
-        db.session.commit()
-        send_email_verification_mail(user, user.email)
-        flash('Congratulations, you are now a registered user! Please login to continue.')
-        return redirect(url_for('auth.login'))
+        user.save()
+        login_user(user)
+        flash('Congratulations, you are now a registered user!')
+        return redirect(url_for('auth.send_email_verification'))
     return render_template('auth/registration_form.html', title='Register',
                            form=form)
+
+
+@blueprint.route('/send_email_verification/', methods=['GET'])
+@blueprint.route('/send_email_verification/<email>', methods=['GET'])
+def send_email_verification(email=None):
+    if not current_user.is_authenticated:
+        flash('You must log in before you can verify your email.')
+        return redirect(url_for('auth.login',
+                                next=url_for('auth.send_email_verification')))
+    if not email:
+        email = current_user.email
+    else:
+        email = Email.query.filter_by(email=email, user_id=current_user.id).first()
+
+    if not email or email.is_verified:
+        return redirect(url_for('index'))
+    send_email_verification_mail(current_user, email)
+    return render_template('auth/send_email_verification.html',
+                           title='Please Confirm Your Email',
+                           email=email)
 
 
 @blueprint.route('/verify_email/<token>', methods=['GET'])
