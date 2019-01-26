@@ -13,7 +13,7 @@ from app.mail import send_mail
 
 def send_email_verification_mail(user, email):
     token = email.verification_token
-    send_mail('[SPA-Base] Verify Your Email',
+    send_mail('[SPA-Base] Please Verify Your Email',
               sender=current_app.config['SERVER_EMAIL'], recipients=[str(email)],
               text_body=render_template('auth/email/email_verification.txt',
                                         user=user, token=token),
