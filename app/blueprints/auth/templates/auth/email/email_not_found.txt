@@ -1,0 +1,12 @@
+Hello!
+
+Someone, hopefully you, was trying to access an account at SPA-Base. We don't
+currently have a user registered with your email address, but we would love for
+you to register.
+You can do so by clicking the following link:
+{{ url_for('auth.register', token=token, _external=True) }}
+If you have not requested access to an account, you can safely ignore this
+email. We won't email you again.
+
+Regards,
+SPA Base Team

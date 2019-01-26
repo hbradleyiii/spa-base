@@ -26,3 +26,9 @@ def send_password_reset_mail(user):
               text_body=render_template('auth/email/password_reset.txt', user=user, token=token),
               html_body=render_template('auth/email/password_reset.html',
                                         user=user, token=token))
+
+def send_email_not_found_mail(email):
+    send_mail('[SPA-Base] Email Not Registered',
+              sender=current_app.config['SERVER_EMAIL'], recipients=[email],
+              text_body=render_template('auth/email/email_not_found.txt'),
+              html_body=render_template('auth/email/email_not_found.html'))
