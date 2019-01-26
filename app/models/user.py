@@ -243,8 +243,9 @@ event.listen(
         CREATE TRIGGER enforce_verified_primary_email_on_update BEFORE UPDATE ON users
             FOR EACH ROW
             BEGIN
-                IF NOT (NEW.primary_email_fk IS NULL AND NEW.active = 0) AND
-                       (SELECT COUNT(email) FROM emails
+                IF NOT (NEW.primary_email_fk <=> OLD.primary_email_fk) AND
+                   NOT (NEW.primary_email_fk IS NULL AND NEW.active = 0) AND
+                   (SELECT COUNT(email) FROM emails
                         WHERE emails.email = NEW.primary_email_fk
                         AND emails.verified = 1) != 1
                 THEN

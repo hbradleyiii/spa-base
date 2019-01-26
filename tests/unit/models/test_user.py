@@ -265,6 +265,39 @@ def test_users_primary_email_must_be_verified__when_using_sql(session):
     with pytest.raises(OperationalError):
         session.connection().execute(query)
 
+def test_user_can_update_attributes_other_than_unverified_primary_email__when_using_sql(session):
+    """A users can update other attributes besides the email when using SQL. In
+    other words, the primary email can remain 'NULL' in an update as long as it
+    isn't being changed."""
+    # Given a user with an unverified email saved to the database
+    user = create_user(session, email='jane@example.com')
+    session.commit()
+
+    # When the user attempts to update first_name column
+    session.connection().execute(
+        User.__table__.update().where(User.id==user.id).\
+                values(first_name='Janett')
+    )
+
+    # Then expect no errors and the first_name to be changed
+    user = user.fresh()
+    assert user.first_name == 'Janett'
+
+def test_user_can_update_attributes_other_than_unverified_primary_email__when_using_orm(session):
+    """A users can update other attributes besides the email when using ORM. In
+    other words, the primary email can remain 'NULL' in an update as long as it
+    isn't being changed."""
+    # Given a user with an unverified email saved to the database
+    user = create_user(session, email='jane@example.com')
+    session.commit()
+
+    # When the user attempts to update first_name
+    user.first_name = 'Janett'
+    user.save()
+
+    # Then expect no errors and the first_name to be changed
+    assert user.first_name == 'Janett'
+
 @requires_mysql
 def test_users_primary_email_must_exist_in_email_table(session):
     """A user's primary email must exist as one of the emails in the email
