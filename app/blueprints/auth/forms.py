@@ -66,3 +66,9 @@ class RegistrationForm(BaseForm):
         if duplicate_email is not None:
             raise ValidationError('A user with this email has already ' + \
                 'registered. Did you forget your password?')
+
+class ChangeEmailForm(BaseForm):
+    email = StringField('Email', validators=[DataRequired(), EmailValidator()])
+    submit = SubmitField('Change Primary Email')
+    recaptcha = RecaptchaField(validators=[
+                               Recaptcha('Please click this box to show you are not a bot.')])
