@@ -59,4 +59,5 @@ class Client(FlaskClient):
                                                           password='password123'))
     def login_new_user(self, session):
         user = create_user(session, password='password123')
-        return self.login(email=user.email, password='password123')
+        response = self.login(email=user.email, password='password123')
+        return user, response
