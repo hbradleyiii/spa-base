@@ -23,6 +23,7 @@ from werkzeug.urls import url_parse
 
 from app.models import db, Email, User
 from .forms import (
+    ChangeEmailForm,
     LoginForm,
     PasswordResetForm,
     RegistrationForm,
@@ -143,6 +144,23 @@ def send_email_verification(email=None):
     return render_template('auth/send_email_verification.html',
                            title='Please Confirm Your Email',
                            email=email)
+
+
+@blueprint.route('/change_email/', methods=['GET', 'POST'])
+def change_email():
+    if not current_user.is_authenticated:
+        flash('You must log in before you can change your email.')
+        return redirect(url_for('auth.login',
+                                next=url_for('auth.change_email')))
+    form = ChangeEmailForm()
+    if form.validate_on_submit():
+        old_email = current_user.email
+        current_user.add_email(form.email.data)
+        current_user.save()
+        old_email.delete()
+        return redirect(url_for('auth.send_email_verification'))
+    return render_template('auth/change_email.html', title='Register',
+                           form=form, user=current_user)
 
 
 @blueprint.route('/verify_email/<token>', methods=['GET'])
