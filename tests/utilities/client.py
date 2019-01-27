@@ -54,10 +54,11 @@ class Client(FlaskClient):
             session['csrf_token'] = flask_session['csrf_token']
         return csrf
 
-    def login(self, email, password):
-        return self.post(url_for('auth.login'), data=dict(email='jane@example.com',
-                                                          password='password123'))
-    def login_new_user(self, session):
-        user = create_user(session, password='password123')
-        response = self.login(email=user.email, password='password123')
+    def login(self, email='jane@example.com', password='password123'):
+        return self.post(url_for('auth.login'), data=dict(email=email,
+                                                          password=password))
+    def login_new_user(self, session, email='jane@example.com',
+                       password='password123'):
+        user = create_user(session, password=password, email=email)
+        response = self.login(email=user.email, password=password)
         return user, response
