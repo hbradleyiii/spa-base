@@ -60,13 +60,13 @@ def login():
         user = User.query.filter(Email.email==form.email.data).first()
         if not authenticate(user, form.password.data):
             flash('Invalid email address or password')
-            return render_template('auth/login_form.html', title='Login', form=form)
+            return render_template('auth/login.html', title='Login', form=form)
         login_user(user, remember=form.remember_me.data)
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
             next_page = url_for('index')
         return redirect(next_page)
-    return render_template('auth/login_form.html', title='Login', form=form)
+    return render_template('auth/login.html', title='Login', form=form)
 
 
 @blueprint.route('/logout/', methods=['GET', 'POST'])
@@ -122,7 +122,7 @@ def register():
         login_user(user)
         flash('Congratulations, you are now a registered user!')
         return redirect(url_for('auth.send_email_verification'))
-    return render_template('auth/registration_form.html', title='Register',
+    return render_template('auth/registration.html', title='Register',
                            form=form)
 
 
